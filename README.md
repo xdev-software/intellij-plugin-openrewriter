@@ -5,6 +5,11 @@
 
 # <img alt="OpenRewriter Plugin icon light" src="./src/main/resources/META-INF/pluginIcon.svg" height="30"> OpenRewriter Plugin X
 
+Provides support for [OpenRewrite](https://github.com/openrewrite).
+
+TODO
+
+<sub>Disclaimer: This is not an official OpenRewrite product and not associated with OpenRewrite</sub>
 
 ## Features
 
