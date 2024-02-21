@@ -17,4 +17,11 @@ Provides support for <a href="https://github.com/openrewrite">OpenRewrite</a>
     <!-- https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html -->
     <idea-version since-build="231"/>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="OpenRewriter"
+                    anchor="bottom"
+                    factoryClass="software.xdev.openrewriter.toolwindow.OpenRewriterExecuteRecipeToolWindowFactory"
+                    icon="software.xdev.openrewriter.OpenRewriterIcons.PLUGIN_13"/>
+    </extensions>
+
 </idea-plugin>
