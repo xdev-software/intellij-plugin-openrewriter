@@ -14,6 +14,6 @@
     </change-notes>
 
     <!-- https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html -->
-    <idea-version since-build="223"/>
+    <idea-version since-build="231"/>
 
 </idea-plugin>
