@@ -3,7 +3,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=xdev-software_intellij-plugin-openrewriter&metric=alert_status)](https://sonarcloud.io/dashboard?id=xdev-software_intellij-plugin-openrewriter)
 [![Feel free to leave a rating](https://img.shields.io/jetbrains/plugin/r/rating/22113?style=social&logo=jetbrains&label=Feel%20free%20to%20leave%20a%20rating)](https://plugins.jetbrains.com/plugin/22113/reviews)
 
-# <img alt="OpenRewriter Plugin icon light" src="./src/main/resources/META-INF/pluginIcon.svg" height="30"> OpenRewriter Plugin X
+# <img alt="OpenRewriter Plugin icon light" src="./src/main/resources/META-INF/pluginIcon.svg" height="30"> OpenRewriter X
 
 Provides support for [OpenRewrite](https://github.com/openrewrite).
 
