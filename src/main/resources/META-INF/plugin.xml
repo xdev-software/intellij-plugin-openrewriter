@@ -20,8 +20,33 @@ Provides support for <a href="https://github.com/openrewrite">OpenRewrite</a>
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="OpenRewriter"
                     anchor="bottom"
-                    factoryClass="software.xdev.openrewriter.toolwindow.OpenRewriterExecuteRecipeToolWindowFactory"
+                    factoryClass="software.xdev.openrewriter.toolwindow.OpenRewriterToolWindowFactory"
                     icon="software.xdev.openrewriter.OpenRewriterIcons.PLUGIN_13"/>
     </extensions>
+
+    <actions>
+        <group id="OpenRewriter.ProjectMenu"
+               class="software.xdev.openrewriter.group.OpenRewriterProjectMenuGroup"
+               popup="true"
+               icon="software.xdev.openrewriter.OpenRewriterIcons.PLUGIN_13"
+               text="OpenRewriter">
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+        </group>
+
+        <group id="OpenRewriter.ToolsMenu"
+               class="software.xdev.openrewriter.group.OpenRewriterToolsMenuGroup"
+               popup="true"
+               icon="software.xdev.openrewriter.OpenRewriterIcons.PLUGIN_13"
+               text="OpenRewriter">
+            <add-to-group group-id="ToolsMenu"/>
+        </group>
+
+        <action class="software.xdev.openrewriter.action.OpenExecuteRecipeAction"
+                icon="software.xdev.openrewriter.OpenRewriterIcons.PLUGIN_13"
+                text="Execute Recipe...">
+            <add-to-group group-id="OpenRewriter.ProjectMenu"/>
+            <add-to-group group-id="OpenRewriter.ToolsMenu"/>
+        </action>
+    </actions>
 
 </idea-plugin>
