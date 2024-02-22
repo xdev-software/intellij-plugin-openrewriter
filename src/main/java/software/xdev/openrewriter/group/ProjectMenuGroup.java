@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 
 
-public class OpenRewriterProjectMenuGroup extends OpenRewriterBaseMenuActionGroup
+public class ProjectMenuGroup extends BaseMenuActionGroup
 {
 	@Override
 	protected boolean isAvailable(@NotNull final AnActionEvent e)

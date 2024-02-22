@@ -10,13 +10,13 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.util.ui.JBUI;
 
 
-public class OpenRewriterExecuteRecipeToolWindowPanel extends JPanel implements DumbAware
+public class ORExecuteRecipeToolWindowPanel extends JPanel implements DumbAware
 {
 	public static final String TITLE = "Execute Recipe";
 	
-	private static final Logger LOG = Logger.getInstance(OpenRewriterExecuteRecipeToolWindowPanel.class);
+	private static final Logger LOG = Logger.getInstance(ORExecuteRecipeToolWindowPanel.class);
 	
-	public OpenRewriterExecuteRecipeToolWindowPanel()
+	public ORExecuteRecipeToolWindowPanel()
 	{
 		super(new BorderLayout());
 		

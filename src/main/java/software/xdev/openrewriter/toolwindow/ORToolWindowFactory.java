@@ -13,7 +13,7 @@ import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.ui.content.ContentManager;
 
 
-public class OpenRewriterToolWindowFactory implements ToolWindowFactory, DumbAware
+public class ORToolWindowFactory implements ToolWindowFactory, DumbAware
 {
 	@Override
 	public void createToolWindowContent(@NotNull final Project project, @NotNull final ToolWindow toolWindow)
@@ -27,8 +27,8 @@ public class OpenRewriterToolWindowFactory implements ToolWindowFactory, DumbAwa
 	{
 		this.addTab(
 			contentManager,
-			new OpenRewriterExecuteRecipeToolWindowPanel(),
-			OpenRewriterExecuteRecipeToolWindowPanel.TITLE);
+			new ORExecuteRecipeToolWindowPanel(),
+			ORExecuteRecipeToolWindowPanel.TITLE);
 	}
 	
 	protected void addTab(

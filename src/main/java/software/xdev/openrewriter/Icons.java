@@ -6,7 +6,7 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.ScalableIcon;
 
 
-public final class OpenRewriterIcons
+public final class Icons
 {
 	public static final Icon PLUGIN = getIcon("/META-INF/pluginIcon.svg");
 	
@@ -14,7 +14,7 @@ public final class OpenRewriterIcons
 	
 	static Icon getIcon(final String path)
 	{
-		return IconLoader.getIcon(path, OpenRewriterIcons.class);
+		return IconLoader.getIcon(path, Icons.class);
 	}
 	
 	static Icon getIcon(final String path, final float width)
@@ -27,7 +27,7 @@ public final class OpenRewriterIcons
 		return icon;
 	}
 	
-	private OpenRewriterIcons()
+	private Icons()
 	{
 	}
 }

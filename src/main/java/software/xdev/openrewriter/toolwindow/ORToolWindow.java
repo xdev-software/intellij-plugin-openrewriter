@@ -11,7 +11,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.ContentManager;
 
 
-public final class OpenRewriterToolWindow
+public final class ORToolWindow
 {
 	public static final String TOOL_WINDOW_ID = "OpenRewriter";
 	
@@ -19,8 +19,8 @@ public final class OpenRewriterToolWindow
 	{
 		openTab(
 			project,
-			OpenRewriterExecuteRecipeToolWindowPanel.TITLE,
-			OpenRewriterExecuteRecipeToolWindowPanel.class,
+			ORExecuteRecipeToolWindowPanel.TITLE,
+			ORExecuteRecipeToolWindowPanel.class,
 			null);
 	}
 	
@@ -65,7 +65,7 @@ public final class OpenRewriterToolWindow
 		return ToolWindowManager.getInstance(project).getToolWindow(TOOL_WINDOW_ID);
 	}
 	
-	private OpenRewriterToolWindow()
+	private ORToolWindow()
 	{
 	}
 }

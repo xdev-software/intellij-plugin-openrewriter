@@ -8,7 +8,7 @@ import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.DumbAware;
 
 
-public abstract class OpenRewriterBaseMenuActionGroup extends DefaultActionGroup implements DumbAware
+public abstract class BaseMenuActionGroup extends DefaultActionGroup implements DumbAware
 {
 	@Override
 	public void update(@NotNull final AnActionEvent e)

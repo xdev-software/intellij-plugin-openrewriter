@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.DumbAwareAction;
 
-import software.xdev.openrewriter.toolwindow.OpenRewriterToolWindow;
+import software.xdev.openrewriter.toolwindow.ORToolWindow;
 
 
 public class OpenExecuteRecipeAction extends DumbAwareAction
@@ -16,6 +16,6 @@ public class OpenExecuteRecipeAction extends DumbAwareAction
 	public void actionPerformed(@NotNull final AnActionEvent e)
 	{
 		Optional.ofNullable(e.getProject())
-			.ifPresent(OpenRewriterToolWindow::openExecuteRecipeTab);
+			.ifPresent(ORToolWindow::openExecuteRecipeTab);
 	}
 }
