@@ -1,4 +1,4 @@
-package software.xdev.openrewriter.toolwindow;
+package software.xdev.openrewriter.ui.toolwindow;
 
 import javax.swing.JComponent;
 

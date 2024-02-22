@@ -1,4 +1,4 @@
-package software.xdev.openrewriter.toolwindow;
+package software.xdev.openrewriter.ui.toolwindow;
 
 import java.util.Optional;
 import java.util.function.Consumer;

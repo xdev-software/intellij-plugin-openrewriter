@@ -1,4 +1,4 @@
-package software.xdev.openrewriter;
+package software.xdev.openrewriter.ui;
 
 import javax.swing.Icon;
 

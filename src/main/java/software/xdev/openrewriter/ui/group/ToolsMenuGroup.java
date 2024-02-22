@@ -1,4 +1,4 @@
-package software.xdev.openrewriter.group;
+package software.xdev.openrewriter.ui.group;
 
 import org.jetbrains.annotations.NotNull;
 
