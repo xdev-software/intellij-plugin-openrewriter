@@ -4,24 +4,27 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComponentContainer;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.ContentManager;
 
+import software.xdev.openrewriter.ui.toolwindow.execute.ORExecuteRecipeToolWindowPanel;
+
 
 public final class ORToolWindow
 {
 	public static final String TOOL_WINDOW_ID = "OpenRewriter";
 	
-	public static void openExecuteRecipeTab(final Project project)
+	public static void openExecuteRecipeTab(final Project project, final Module module)
 	{
 		openTab(
 			project,
 			ORExecuteRecipeToolWindowPanel.TITLE,
 			ORExecuteRecipeToolWindowPanel.class,
-			null);
+			p -> p.requestedWith(project, module));
 	}
 	
 	static <T> void openTab(
@@ -60,7 +63,7 @@ public final class ORToolWindow
 			.ifPresent(contentManager::setSelectedContent);
 	}
 	
-	static ToolWindow getToolWindow(final Project project)
+	public static ToolWindow getToolWindow(final Project project)
 	{
 		return ToolWindowManager.getInstance(project).getToolWindow(TOOL_WINDOW_ID);
 	}

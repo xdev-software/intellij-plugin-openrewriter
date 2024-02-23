@@ -12,22 +12,24 @@ import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.openapi.wm.ToolWindowType;
 import com.intellij.ui.content.ContentManager;
 
+import software.xdev.openrewriter.ui.toolwindow.execute.ORExecuteRecipeToolWindowPanel;
+
 
 public class ORToolWindowFactory implements ToolWindowFactory, DumbAware
 {
 	@Override
 	public void createToolWindowContent(@NotNull final Project project, @NotNull final ToolWindow toolWindow)
 	{
-		this.addExecuteRecipeTab(toolWindow.getContentManager());
+		this.addExecuteRecipeTab(project, toolWindow.getContentManager());
 		
 		toolWindow.setType(ToolWindowType.DOCKED, null);
 	}
 	
-	protected void addExecuteRecipeTab(final ContentManager contentManager)
+	protected void addExecuteRecipeTab(final Project project, final ContentManager contentManager)
 	{
 		this.addTab(
 			contentManager,
-			new ORExecuteRecipeToolWindowPanel(),
+			new ORExecuteRecipeToolWindowPanel(project),
 			ORExecuteRecipeToolWindowPanel.TITLE);
 	}
 	

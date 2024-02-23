@@ -17,11 +17,37 @@ Provides support for <a href="https://github.com/openrewrite">OpenRewrite</a>
     <!-- https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html -->
     <idea-version since-build="231"/>
 
+    <depends optional="true" config-file="plugin-maven.xml">org.jetbrains.idea.maven</depends>
+    <depends optional="true" config-file="plugin-gradle.xml">org.jetbrains.plugins.gradle</depends>
+
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="OpenRewriter"
                     anchor="bottom"
                     factoryClass="software.xdev.openrewriter.ui.toolwindow.ORToolWindowFactory"
                     icon="software.xdev.openrewriter.ui.Icons.PLUGIN_13"/>
+
+        <notificationGroup id="OpenRewriter"
+                           displayType="BALLOON"/>
+
+        <notificationGroup id="OpenRewriter: Rewrite successful"
+                           displayType="NONE"/>
+        <notificationGroup id="OpenRewriter: Rewrite failed"
+                           displayType="STICKY_BALLOON"/>
+    </extensions>
+
+    <extensionPoints>
+        <extensionPoint name="recipeExecutor"
+                        interface="software.xdev.openrewriter.executor.RecipesExecutor"
+                        dynamic="true"/>
+
+        <extensionPoint name="recipeExecutionRequestTargetProvider"
+                        interface="software.xdev.openrewriter.executor.request.target.ExecutionTargetProvider"
+                        dynamic="true"/>
+    </extensionPoints>
+
+    <extensions defaultExtensionNs="software.xdev.openrewriter">
+        <recipeExecutionRequestTargetProvider
+                implementation="software.xdev.openrewriter.executor.request.target.module.ModuleExecutionTargetProvider"/>
     </extensions>
 
     <actions>
