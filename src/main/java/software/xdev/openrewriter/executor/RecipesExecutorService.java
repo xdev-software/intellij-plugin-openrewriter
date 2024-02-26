@@ -13,7 +13,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.concurrency.annotations.RequiresBackgroundThread;
 
 import software.xdev.openrewriter.executor.request.ExecutionRequest;
-import software.xdev.openrewriter.executor.request.recipedata.artifact.ArtifactRecipesData;
+import software.xdev.openrewriter.executor.request.recipedata.simpleartifact.SimpleArtifactRecipesData;
 
 
 @Service(Service.Level.PROJECT)
@@ -30,10 +30,10 @@ public final class RecipesExecutorService
 	public ExecutionRequest createDefaultRequest(final Project project)
 	{
 		return new ExecutionRequest(
-			new ArtifactRecipesData(),
+			new SimpleArtifactRecipesData(),
 			// Can be null when neither Maven nor Gradle is supported by the IDE
-			RecipesExecutorEPManager.executors().stream().findFirst().orElse(null),
-			RecipesExecutorEPManager.executionTargetProviders().stream()
+			RecipesExecutorEPManager.recipesExecutors().stream().findFirst().orElse(null),
+			RecipesExecutorEPManager.executionRequestTargetProviders().stream()
 				.findFirst()
 				.orElseThrow()
 				.createDefault(project)

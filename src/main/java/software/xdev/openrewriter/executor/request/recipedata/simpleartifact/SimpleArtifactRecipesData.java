@@ -1,4 +1,4 @@
-package software.xdev.openrewriter.executor.request.recipedata.artifact;
+package software.xdev.openrewriter.executor.request.recipedata.simpleartifact;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -7,7 +7,7 @@ import java.util.Set;
 import software.xdev.openrewriter.executor.request.recipedata.RecipesData;
 
 
-public class ArtifactRecipesData implements RecipesData
+public class SimpleArtifactRecipesData implements RecipesData
 {
 	private Set<Artifact> artifacts = new HashSet<>();
 	
@@ -36,6 +36,6 @@ public class ArtifactRecipesData implements RecipesData
 	@Override
 	public boolean canExecute()
 	{
-		return !this.getArtifacts().isEmpty() && !this.getRecipes().isEmpty();
+		return !this.getRecipes().isEmpty();
 	}
 }

@@ -110,8 +110,8 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 		this.withAndTargetContainerPanel.add(buttonBarVl);
 		
 		this.withAndTargetPanel.setAvailableData(
-			RecipesExecutorEPManager.executors(),
-			RecipesExecutorEPManager.executionTargetProviders());
+			RecipesExecutorEPManager.recipesExecutors(),
+			RecipesExecutorEPManager.executionRequestTargetProviders());
 		
 		this.rootConfigPanelsStream().forEach(p -> p.setValueChangeCallback(this::updateUIState));
 		
@@ -209,7 +209,7 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 		
 		if(module != null)
 		{
-			RecipesExecutorEPManager.executionTargetProviders().stream()
+			RecipesExecutorEPManager.executionRequestTargetProviders().stream()
 				.filter(ModuleExecutionTargetProvider.class::isInstance)
 				.map(ModuleExecutionTargetProvider.class::cast)
 				.findFirst()

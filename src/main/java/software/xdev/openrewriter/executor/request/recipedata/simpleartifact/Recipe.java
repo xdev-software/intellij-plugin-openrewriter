@@ -1,4 +1,4 @@
-package software.xdev.openrewriter.executor.request.recipedata.artifact;
+package software.xdev.openrewriter.executor.request.recipedata.simpleartifact;
 
 import java.util.Comparator;
 import java.util.Objects;

@@ -107,15 +107,14 @@ public class EditableListPanelManager<T extends Comparable<T>>
 	{
 		return actionButton -> {
 			final T oldValue = this.jbList.getSelectedValue();
-			final String oldValueString = this.toPresentation.apply(oldValue);
 			Optional.ofNullable(Messages.showInputDialog(
 					this.addOrEditMessage,
 					this.titleEdit,
 					null,
-					oldValueString,
+					this.toPresentation.apply(oldValue),
 					this.inputValidator))
-				.filter(v -> !v.equals(oldValueString))
 				.map(this.toModel)
+				.filter(v -> !v.equals(oldValue))
 				.ifPresent(value -> {
 					this.getData().remove(oldValue);
 					this.model.removeElement(oldValue);

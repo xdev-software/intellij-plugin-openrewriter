@@ -12,24 +12,24 @@ import software.xdev.openrewriter.executor.request.target.ExecutionTargetProvide
 
 public final class RecipesExecutorEPManager
 {
-	private static final ExtensionPointName<RecipesExecutor> EP_RECIPE_EXECUTORS =
-		ExtensionPointName.create("software.xdev.openrewriter.recipeExecutor");
+	private static final ExtensionPointName<RecipesExecutor> EP_RECIPES_EXECUTORS =
+		ExtensionPointName.create("software.xdev.openrewriter.recipesExecutor");
 	
-	private static final ExtensionPointName<ExecutionTargetProvider<?>> EP_RECIPE_EXECUTION_REQUEST_TARGET_PROVIDERS =
-		ExtensionPointName.create("software.xdev.openrewriter.recipeExecutionRequestTargetProvider");
+	private static final ExtensionPointName<ExecutionTargetProvider<?>> EP_EXECUTION_REQUEST_TARGET_PROVIDERS =
+		ExtensionPointName.create("software.xdev.openrewriter.executionRequestTargetProvider");
 	
 	private static final ExtensionPointName<RecipesDataProvider<?>> EP_RECIPES_DATA_PROVIDERS =
 		ExtensionPointName.create("software.xdev.openrewriter.recipesDataProvider");
 	
-	public static List<RecipesExecutor> executors()
+	public static List<RecipesExecutor> recipesExecutors()
 	{
-		return order(EP_RECIPE_EXECUTORS.getExtensionList());
+		return order(EP_RECIPES_EXECUTORS.getExtensionList());
 	}
 	
 	@SuppressWarnings("java:S1452")
-	public static List<ExecutionTargetProvider<?>> executionTargetProviders()
+	public static List<ExecutionTargetProvider<?>> executionRequestTargetProviders()
 	{
-		return order(EP_RECIPE_EXECUTION_REQUEST_TARGET_PROVIDERS.getExtensionList());
+		return order(EP_EXECUTION_REQUEST_TARGET_PROVIDERS.getExtensionList());
 	}
 	
 	@SuppressWarnings("java:S1452")

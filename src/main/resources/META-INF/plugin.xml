@@ -22,7 +22,7 @@ Provides support for <a href="https://github.com/openrewrite">OpenRewrite</a>
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="OpenRewriter"
-                    anchor="bottom"
+                    anchor="right"
                     factoryClass="software.xdev.openrewriter.ui.toolwindow.ORToolWindowFactory"
                     icon="software.xdev.openrewriter.ui.Icons.PLUGIN_13"/>
 
@@ -36,25 +36,29 @@ Provides support for <a href="https://github.com/openrewrite">OpenRewrite</a>
     </extensions>
 
     <extensionPoints>
-        <extensionPoint name="recipeExecutor"
+        <extensionPoint name="recipesExecutor"
                         interface="software.xdev.openrewriter.executor.RecipesExecutor"
                         dynamic="true"/>
 
-        <extensionPoint name="recipeExecutionRequestTargetProvider"
+        <extensionPoint name="executionRequestTargetProvider"
                         interface="software.xdev.openrewriter.executor.request.target.ExecutionTargetProvider"
                         dynamic="true"/>
 
         <extensionPoint name="recipesDataProvider"
                         interface="software.xdev.openrewriter.executor.request.recipedata.RecipesDataProvider"
                         dynamic="true"/>
+
+        <extensionPoint name="requestCommandBuilder"
+                        interface="software.xdev.openrewriter.executor.RequestCommandBuilder"
+                        dynamic="true"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="software.xdev.openrewriter">
-        <recipeExecutionRequestTargetProvider
+        <executionRequestTargetProvider
                 implementation="software.xdev.openrewriter.executor.request.target.module.ModuleExecutionTargetProvider"/>
 
         <recipesDataProvider
-                implementation="software.xdev.openrewriter.executor.request.recipedata.artifact.ArtifactRecipesDataProvider"/>
+                implementation="software.xdev.openrewriter.executor.request.recipedata.simpleartifact.SimpleArtifactRecipesDataProvider"/>
     </extensions>
 
     <actions>

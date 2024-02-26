@@ -1,7 +1,5 @@
-package software.xdev.openrewriter.executor.request.recipedata.artifact;
+package software.xdev.openrewriter.executor.request.recipedata.simpleartifact;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -19,12 +17,12 @@ import software.xdev.openrewriter.ui.toolwindow.execute.panels.EditableListPanel
 import software.xdev.openrewriter.ui.toolwindow.execute.panels.ExecuteRecipeConfigPanel;
 
 
-public class ArtifactRecipesDataProvider implements RecipesDataProvider<ArtifactRecipesData>
+public class SimpleArtifactRecipesDataProvider implements RecipesDataProvider<SimpleArtifactRecipesData>
 {
 	@Override
 	public String name()
 	{
-		return "Artifact";
+		return "Simple/Artifact";
 	}
 	
 	@Override
@@ -34,15 +32,15 @@ public class ArtifactRecipesDataProvider implements RecipesDataProvider<Artifact
 	}
 	
 	@Override
-	public ArtifactRecipesData createDefault(final Project project)
+	public SimpleArtifactRecipesData createDefault(final Project project)
 	{
-		return new ArtifactRecipesData();
+		return new SimpleArtifactRecipesData();
 	}
 	
 	@Override
-	public Class<ArtifactRecipesData> matchingClass()
+	public Class<SimpleArtifactRecipesData> matchingClass()
 	{
-		return ArtifactRecipesData.class;
+		return SimpleArtifactRecipesData.class;
 	}
 	
 	@Override
@@ -51,36 +49,48 @@ public class ArtifactRecipesDataProvider implements RecipesDataProvider<Artifact
 		return new ArtifactRecipesDataConfigPanel();
 	}
 	
-	public static class ArtifactRecipesDataConfigPanel extends ExecuteRecipeConfigPanel<ArtifactRecipesData>
+	public static class ArtifactRecipesDataConfigPanel extends ExecuteRecipeConfigPanel<SimpleArtifactRecipesData>
 	{
+		@SuppressWarnings("java:S1192")
 		private final EditableListPanelManager<Artifact> artifactPanelManager = new EditableListPanelManager<>(
 			"Artifacts",
-			"No artifacts",
+			"No artifacts / Only built-in recipes available",
 			"Add artifact",
 			"Edit artifact",
+			// @formatter:off
 			"<html><body>"
-				+ "<p>An artifact is described like this: <code>groupId:artifactId:version</code></p>"
+				+ "<p>An artifact is described like this: <code>[groupId:]artifactId[:version]</code></p>"
+				+ "<table>"
+				+ "<tr>"
+				+ "<th>Attribute</th>"
+				+ "<th>Default value</th>"
+				+ "</tr>"
+				+ "<tr>"
+				+ "<td><code>groupId</code></td>"
+				+ "<td><code>" + Artifact.DEFAULT_GROUP_ID + "</code></td>"
+				+ "</tr>"
+				+ "<tr>"
+				+ "<td><code>version</code></td>"
+				+ "<td><code>" + Artifact.DEFAULT_VERSION + "</code></td>"
+				+ "</tr>"
+				+ "</table>"
+				+ "<p>Examples:</p>"
+				+ "<ul>"
+				+ "<li><code>rewrite-migrate-java</code></li>"
+				+ "<li><code>" + Artifact.DEFAULT_GROUP_ID + ":rewrite-migrate-java</code></li>"
+				+ "<li><code>" + Artifact.DEFAULT_GROUP_ID + ":rewrite-migrate-java:" + Artifact.DEFAULT_VERSION
+				+ "</code></li>"
+				+ "</ul>"
 				+ "<p>The value is derived from <a href=\"https://docs.openrewrite"
 				+ ".org/running-recipes/running-rewrite-on-a-maven-project-without-modifying-the"
-				+ "-build\"><code>recipeArtifactCoordinates</code></a></p>"
-				+ "<p>For more information checkout the "
-				+ "<a href=\"https://maven.apache.org/pom.html#maven-coordinates\">Maven docs</a></p>"
+				+ "-build\"><code>recipeArtifactCoordinates</code></a>.</p>"
+				+ "<br/>"
 				+ "</body></html>",
-			"org.openrewrite.recipe:artifactId:LATEST",
-			a -> a.getGroupId() + ":" + a.getArtifactId() + ":" + a.getVersion(),
-			str -> {
-				final List<String> parts = List.of(str.split(":"));
-				if(parts.size() != 3)
-				{
-					return null;
-				}
-				
-				return new Artifact(parts.get(0), parts.get(1), parts.get(2));
-			},
-			new ArtifactRecipesValidator(input -> input != null && Stream.of(input.split(":"))
-				.filter(Objects::nonNull)
-				.filter(s -> !s.isBlank())
-				.count() == 3)
+			// @formatter:on
+			"rewrite-migrate-java",
+			Artifact::toShortMavenArtifact,
+			Artifact::parse,
+			new ArtifactRecipesValidator(input -> Artifact.parse(input) != null)
 		);
 		
 		private final EditableListPanelManager<Recipe> recipePanelManager = new EditableListPanelManager<>(
@@ -89,13 +99,14 @@ public class ArtifactRecipesDataProvider implements RecipesDataProvider<Artifact
 			"Add recipe",
 			"Edit recipe",
 			"<html><body>"
-				+ "<p>A recipeID is described like this: "
-				+ "<code>org.openrewrite.java.migrate.jakarta.JavaxMigrationToJakarta</code></p>"
+				+ "<p>A recipeID is described like this:<br/>"
+				+ "<code>org.openrewrite.java.RemoveUnusedImports</code></p>"
 				+ "<p>The value is derived from <a href=\"https://docs.openrewrite"
 				+ ".org/running-recipes/running-rewrite-on-a-maven-project-without-modifying-the"
-				+ "-build\"><code>activeRecipes</code></a></p>"
+				+ "-build\"><code>activeRecipes</code></a>.</p>"
+				+ "<br/>"
 				+ "</body></html>",
-			null,
+			"org.openrewrite.java.RemoveUnusedImports",
 			Recipe::getId,
 			Recipe::new,
 			new ArtifactRecipesValidator(input -> input != null && !input.isBlank())
@@ -117,7 +128,7 @@ public class ArtifactRecipesDataProvider implements RecipesDataProvider<Artifact
 		}
 		
 		@Override
-		protected void updateFrom(final ArtifactRecipesData data)
+		protected void updateFrom(final SimpleArtifactRecipesData data)
 		{
 			this.artifactPanelManager.update(data.getArtifacts());
 			this.recipePanelManager.update(data.getRecipes());
