@@ -1,9 +1,13 @@
 package software.xdev.openrewriter.ui.toolwindow.execute;
 
+import java.awt.event.ActionEvent;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -13,15 +17,22 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.VerticalFlowLayout;
+import com.intellij.ui.components.panels.HorizontalLayout;
 
 import software.xdev.openrewriter.executor.RecipesExecutorEPManager;
 import software.xdev.openrewriter.executor.RecipesExecutorService;
 import software.xdev.openrewriter.executor.request.ExecutionRequest;
+import software.xdev.openrewriter.executor.request.recipedata.RecipesData;
+import software.xdev.openrewriter.executor.request.recipedata.RecipesDataProvider;
 import software.xdev.openrewriter.executor.request.target.module.ModuleExecutionTarget;
 import software.xdev.openrewriter.executor.request.target.module.ModuleExecutionTargetProvider;
 import software.xdev.openrewriter.ui.NotificationService;
 import software.xdev.openrewriter.ui.UIThreadUtil;
 import software.xdev.openrewriter.ui.toolwindow.ORSimpleToolWindowPanel;
+import software.xdev.openrewriter.ui.toolwindow.execute.panels.ExecuteRecipeConfigPanel;
+import software.xdev.openrewriter.ui.toolwindow.execute.panels.ExecuteRecipeWithAndTargetPanel;
+import software.xdev.openrewriter.ui.toolwindow.execute.panels.PresentableProviderPanel;
 
 
 public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
@@ -33,7 +44,7 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 		TITLE,
 		AllIcons.Actions.Execute,
 		this::canExecute,
-		this::execInvoked);
+		this::execInvokedAction);
 	
 	private final SimpleExecuteRecipeAction actionReset = new SimpleExecuteRecipeAction(
 		"Restore Defaults",
@@ -41,9 +52,19 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 		this::canReset,
 		ev -> this.setDefaultExecutionRequest());
 	
-	private final ExecuteRecipeDataPanel dataPanel = new ExecuteRecipeDataPanel();
+	private final PresentableProviderPanel<RecipesDataProvider<?>, RecipesData, ExecutionRequest> dataPanel =
+		new PresentableProviderPanel<>(
+			this::getProject,
+			"Run recipe from",
+			ExecutionRequest::getRecipesData,
+			ExecutionRequest::setRecipesData);
 	
-	private final ExecuteRecipeWithTargetPanel withTargetPanel = new ExecuteRecipeWithTargetPanel();
+	private final JPanel withAndTargetContainerPanel = new JPanel();
+	
+	private final ExecuteRecipeWithAndTargetPanel withAndTargetPanel =
+		new ExecuteRecipeWithAndTargetPanel(this::getProject);
+	
+	private final JButton btnRewrite = new JButton("Rewrite", AllIcons.Actions.Execute);
 	
 	// State
 	private final AtomicBoolean isExecuting = new AtomicBoolean(false);
@@ -69,16 +90,46 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 		actionGroup.add(this.actionReset);
 		this.setToolbar("OR_EXECUTE_RECIPE", actionGroup);
 		
-		this.withTargetPanel.setAvailableData(
+		this.dataPanel.setLayout(new VerticalFlowLayout(true, true));
+		this.dataPanel.setAvailable(RecipesExecutorEPManager.recipesDataProviders());
+		
+		this.withAndTargetContainerPanel.setLayout(
+			new VerticalFlowLayout(VerticalFlowLayout.TOP, 0, 0, true, true));
+		this.withAndTargetContainerPanel.add(this.withAndTargetPanel);
+		
+		this.btnRewrite.addActionListener(this::execInvokedButton);
+		
+		final JPanel buttonBarHl = new JPanel();
+		buttonBarHl.setLayout(new HorizontalLayout(0));
+		buttonBarHl.add(this.btnRewrite, HorizontalLayout.RIGHT);
+		
+		final JPanel buttonBarVl = new JPanel();
+		buttonBarVl.setLayout(new VerticalFlowLayout(VerticalFlowLayout.BOTTOM));
+		buttonBarVl.add(buttonBarHl);
+		
+		this.withAndTargetContainerPanel.add(buttonBarVl);
+		
+		this.withAndTargetPanel.setAvailableData(
 			RecipesExecutorEPManager.executors(),
 			RecipesExecutorEPManager.executionTargetProviders());
 		
-		this.rootConfigPanelsStream().forEach(p -> p.setValueChangeCallback(this::refreshToolbar));
+		this.rootConfigPanelsStream().forEach(p -> p.setValueChangeCallback(this::updateUIState));
 		
 		super.setContent(this.createSplitter(
 			this.dataPanel,
-			this.withTargetPanel,
+			this.withAndTargetContainerPanel,
 			"OR_EXECUTE_RECIPE_PROPORTION_PROPERTY"));
+	}
+	
+	protected void updateBtnRewriteEnabled()
+	{
+		this.btnRewrite.setEnabled(this.canExecute());
+	}
+	
+	protected void updateUIState()
+	{
+		this.refreshToolbar();
+		UIThreadUtil.run(this.getProject(), this::updateBtnRewriteEnabled);
 	}
 	
 	protected boolean canExecute()
@@ -91,9 +142,24 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 		return !this.isExecuting.get();
 	}
 	
-	protected void execInvoked(final AnActionEvent event)
+	protected void execInvokedAction(final AnActionEvent event)
 	{
 		event.getPresentation().setEnabled(false);
+		this.btnRewrite.setEnabled(false);
+		
+		this.execInvoked();
+	}
+	
+	protected void execInvokedButton(final ActionEvent event)
+	{
+		this.btnRewrite.setEnabled(false);
+		this.refreshToolbar();
+		
+		this.execInvoked();
+	}
+	
+	protected void execInvoked()
+	{
 		this.isExecuting.set(true);
 		
 		final NotificationService notificationService = this.getService(NotificationService.class);
@@ -111,14 +177,14 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 				.show(),
 			() -> {
 				this.isExecuting.set(false);
-				UIThreadUtil.run(this.getProject(), this::refreshToolbar);
+				this.updateUIState();
 			}
 		);
 	}
 	
 	protected void setDefaultExecutionRequest()
 	{
-		this.setExecutionRequest(this.getService(RecipesExecutorService.class).createDefaultRequest());
+		this.setExecutionRequest(this.getService(RecipesExecutorService.class).createDefaultRequest(this.getProject()));
 	}
 	
 	protected void setExecutionRequest(final ExecutionRequest executionRequest)
@@ -127,23 +193,12 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 		
 		this.rootConfigPanelsStream().forEach(p -> p.updateFromAndBind(this.executionRequest));
 		
-		this.refreshToolbar();
+		this.updateUIState();
 	}
 	
 	protected Stream<ExecuteRecipeConfigPanel<ExecutionRequest>> rootConfigPanelsStream()
 	{
-		return Stream.of(this.dataPanel, this.withTargetPanel);
-	}
-	
-	@SuppressWarnings("java:S2589") // Is null in constructor!
-	@Override
-	public void setProject(final Project project)
-	{
-		super.setProject(project);
-		if(this.withTargetPanel != null)
-		{
-			this.withTargetPanel.setProject(project);
-		}
+		return Stream.of(this.dataPanel, this.withAndTargetPanel);
 	}
 	
 	public void requestedWith(
@@ -162,8 +217,8 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 					Runnable updateTask = null;
 					if(!Objects.equals(this.executionRequest.getTarget().getClass(), p.matchingClass()))
 					{
-						this.executionRequest.setTarget(p.createDefault());
-						updateTask = () -> this.withTargetPanel.updateFromAndBind(this.executionRequest);
+						this.executionRequest.setTarget(p.createDefault(project));
+						updateTask = () -> this.withAndTargetPanel.updateFromAndBind(this.executionRequest);
 					}
 					if(this.executionRequest.getTarget() instanceof final ModuleExecutionTarget moduleExecutionTarget)
 					{
@@ -171,7 +226,7 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 						// Prev update has higher prio
 						if(updateTask == null)
 						{
-							updateTask = this.withTargetPanel::refreshTargetConfigPanel;
+							updateTask = this.withAndTargetPanel::refreshTargetConfigPanel;
 						}
 					}
 					

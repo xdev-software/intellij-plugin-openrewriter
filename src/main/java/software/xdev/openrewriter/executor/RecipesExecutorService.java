@@ -27,13 +27,16 @@ public final class RecipesExecutorService
 		this.project = project;
 	}
 	
-	public ExecutionRequest createDefaultRequest()
+	public ExecutionRequest createDefaultRequest(final Project project)
 	{
 		return new ExecutionRequest(
 			new ArtifactRecipesData(),
 			// Can be null when neither Maven nor Gradle is supported by the IDE
 			RecipesExecutorEPManager.executors().stream().findFirst().orElse(null),
-			RecipesExecutorEPManager.executionTargetProviders().stream().findFirst().orElseThrow().createDefault()
+			RecipesExecutorEPManager.executionTargetProviders().stream()
+				.findFirst()
+				.orElseThrow()
+				.createDefault(project)
 		);
 	}
 	

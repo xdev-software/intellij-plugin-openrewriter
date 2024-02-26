@@ -43,11 +43,18 @@ Provides support for <a href="https://github.com/openrewrite">OpenRewrite</a>
         <extensionPoint name="recipeExecutionRequestTargetProvider"
                         interface="software.xdev.openrewriter.executor.request.target.ExecutionTargetProvider"
                         dynamic="true"/>
+
+        <extensionPoint name="recipesDataProvider"
+                        interface="software.xdev.openrewriter.executor.request.recipedata.RecipesDataProvider"
+                        dynamic="true"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="software.xdev.openrewriter">
         <recipeExecutionRequestTargetProvider
                 implementation="software.xdev.openrewriter.executor.request.target.module.ModuleExecutionTargetProvider"/>
+
+        <recipesDataProvider
+                implementation="software.xdev.openrewriter.executor.request.recipedata.artifact.ArtifactRecipesDataProvider"/>
     </extensions>
 
     <actions>

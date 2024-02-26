@@ -9,6 +9,11 @@ public class ModuleExecutionTarget implements ExecutionTarget
 {
 	private Module module;
 	
+	public ModuleExecutionTarget(final Module module)
+	{
+		this.module = module;
+	}
+	
 	public Module getModule()
 	{
 		return this.module;

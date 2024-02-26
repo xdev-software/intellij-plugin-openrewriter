@@ -1,6 +1,7 @@
 package software.xdev.openrewriter.executor.request.target.module;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
@@ -13,7 +14,7 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 
 import software.xdev.openrewriter.executor.request.target.ExecutionTargetProvider;
-import software.xdev.openrewriter.ui.toolwindow.execute.ExecuteRecipeConfigPanel;
+import software.xdev.openrewriter.ui.toolwindow.execute.panels.ExecuteRecipeConfigPanel;
 
 
 public class ModuleExecutionTargetProvider implements ExecutionTargetProvider<ModuleExecutionTarget>
@@ -43,9 +44,9 @@ public class ModuleExecutionTargetProvider implements ExecutionTargetProvider<Mo
 	}
 	
 	@Override
-	public ModuleExecutionTarget createDefault()
+	public ModuleExecutionTarget createDefault(final Project project)
 	{
-		return new ModuleExecutionTarget();
+		return new ModuleExecutionTarget(getModules(project).findFirst().orElse(null));
 	}
 	
 	@Override
@@ -65,9 +66,7 @@ public class ModuleExecutionTargetProvider implements ExecutionTargetProvider<Mo
 			this.cbModules.allowEmptySelection("<null>");
 			this.add(this.cbModules);
 			
-			this.cbModules.setModel(new DefaultComboBoxModel<>(
-				Arrays.stream(ModuleManager.getInstance(project).getModules())
-					.toArray(Module[]::new)));
+			this.cbModules.setModel(new DefaultComboBoxModel<>(getModules(project).toArray(Module[]::new)));
 			
 			this.cbModules.addItemListener(e -> this.changeValue(d -> d.setModule((Module)e.getItem())));
 		}
@@ -77,5 +76,10 @@ public class ModuleExecutionTargetProvider implements ExecutionTargetProvider<Mo
 		{
 			this.cbModules.setSelectedItem(data.getModule());
 		}
+	}
+	
+	private static Stream<Module> getModules(final Project project)
+	{
+		return Arrays.stream(ModuleManager.getInstance(project).getModules());
 	}
 }

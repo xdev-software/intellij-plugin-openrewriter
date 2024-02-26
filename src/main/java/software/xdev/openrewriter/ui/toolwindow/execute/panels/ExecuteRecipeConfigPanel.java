@@ -1,9 +1,12 @@
-package software.xdev.openrewriter.ui.toolwindow.execute;
+package software.xdev.openrewriter.ui.toolwindow.execute.panels;
 
 import java.awt.Font;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -64,6 +67,23 @@ public abstract class ExecuteRecipeConfigPanel<T> extends JPanel implements Disp
 	@Override
 	public void dispose()
 	{
+	}
+	
+	protected JPanel addWithVerticalLayout(final JComponent... components)
+	{
+		final JPanel panel = wrapInVerticalLayout(VerticalFlowLayout::new, components);
+		this.add(panel);
+		return panel;
+	}
+	
+	protected static JPanel wrapInVerticalLayout(
+		final Supplier<VerticalFlowLayout> verticalFlowLayoutSupplier,
+		final JComponent... components)
+	{
+		final JPanel panel = new JPanel();
+		panel.setLayout(verticalFlowLayoutSupplier.get());
+		Stream.of(components).forEach(panel::add);
+		return panel;
 	}
 	
 	@SuppressWarnings("checkstyle:MagicNumber")

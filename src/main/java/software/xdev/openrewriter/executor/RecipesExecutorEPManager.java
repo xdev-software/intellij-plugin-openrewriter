@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.intellij.openapi.extensions.ExtensionPointName;
 
+import software.xdev.openrewriter.executor.request.recipedata.RecipesDataProvider;
 import software.xdev.openrewriter.executor.request.target.ExecutionTargetProvider;
 
 
@@ -17,6 +18,9 @@ public final class RecipesExecutorEPManager
 	private static final ExtensionPointName<ExecutionTargetProvider<?>> EP_RECIPE_EXECUTION_REQUEST_TARGET_PROVIDERS =
 		ExtensionPointName.create("software.xdev.openrewriter.recipeExecutionRequestTargetProvider");
 	
+	private static final ExtensionPointName<RecipesDataProvider<?>> EP_RECIPES_DATA_PROVIDERS =
+		ExtensionPointName.create("software.xdev.openrewriter.recipesDataProvider");
+	
 	public static List<RecipesExecutor> executors()
 	{
 		return order(EP_RECIPE_EXECUTORS.getExtensionList());
@@ -26,6 +30,12 @@ public final class RecipesExecutorEPManager
 	public static List<ExecutionTargetProvider<?>> executionTargetProviders()
 	{
 		return order(EP_RECIPE_EXECUTION_REQUEST_TARGET_PROVIDERS.getExtensionList());
+	}
+	
+	@SuppressWarnings("java:S1452")
+	public static List<RecipesDataProvider<?>> recipesDataProviders()
+	{
+		return order(EP_RECIPES_DATA_PROVIDERS.getExtensionList());
 	}
 	
 	private static <T extends Provider> List<T> order(final Collection<T> input)
