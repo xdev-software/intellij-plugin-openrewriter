@@ -41,7 +41,10 @@ public class ExecuteRecipeWithAndTargetPanel extends ExecuteRecipeConfigPanel<Ex
 			e -> this.ifData(d -> this.cbExecuteWith.setSelectedItem(e)));
 		
 		this.cbExecuteWith.setRenderer((list, value, index, isSelected, cellHasFocus) ->
-			new JLabel(value.name(), value.icon(), SwingConstants.LEADING));
+			new JLabel(
+				value != null ? value.name() : "<No execution provider available>",
+				value != null ? value.icon() : AllIcons.General.Warning,
+				SwingConstants.LEADING));
 		
 		this.addWithVerticalLayout(
 			new JLabel("Execute with"),
