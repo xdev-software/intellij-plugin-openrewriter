@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
@@ -112,7 +113,12 @@ public class Artifact implements Comparable<Artifact>
 	
 	public String toFullMavenArtifact()
 	{
-		return String.join(":", this.getGroupId(), this.getArtifactId(), this.getVersion());
+		return this.toFullMavenArtifact(UnaryOperator.identity());
+	}
+	
+	public String toFullMavenArtifact(final UnaryOperator<String> versionAdapter)
+	{
+		return String.join(":", this.getGroupId(), this.getArtifactId(), versionAdapter.apply(this.getVersion()));
 	}
 	
 	@Nullable

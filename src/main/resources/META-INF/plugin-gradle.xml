@@ -2,5 +2,10 @@
 <idea-plugin>
 	<extensions defaultExtensionNs="software.xdev.openrewriter">
 		<recipesExecutor implementation="software.xdev.openrewriter.executor.gradle.GradleRecipesExecutor"/>
+
+		<requestCommandBuilder
+				implementation="software.xdev.openrewriter.executor.gradle.rcb.GradleModuleExecutionTargetRCB"/>
+		<requestCommandBuilder
+				implementation="software.xdev.openrewriter.executor.gradle.rcb.GradleSimpleArtifactRecipesDataRCB"/>
 	</extensions>
 </idea-plugin>
