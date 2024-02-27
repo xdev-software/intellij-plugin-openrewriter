@@ -1,6 +1,7 @@
 package software.xdev.openrewriter.executor.maven;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.swing.Icon;
 
@@ -8,7 +9,9 @@ import org.jetbrains.idea.maven.execution.MavenRunConfigurationType;
 import org.jetbrains.idea.maven.execution.MavenRunnerParameters;
 import org.jetbrains.idea.maven.execution.MavenRunnerSettings;
 import org.jetbrains.idea.maven.project.MavenGeneralSettings;
+import org.jetbrains.idea.maven.project.MavenProjectsManager;
 
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 
 import icons.MavenIcons;
@@ -35,7 +38,17 @@ public class MavenRecipesExecutor implements RecipesExecutor
 	@Override
 	public int orderPriority()
 	{
+		// Prioritize Maven as it's more widespread and doesn't require creation of a temporary file
+		// Anyway: Project is usually selected automatically based on #isMatchingModule
 		return 5;
+	}
+	
+	@Override
+	public boolean isMatchingModule(final Project project, final Module module)
+	{
+		return Optional.ofNullable(MavenProjectsManager.getInstanceIfCreated(project))
+			.map(mavenProjectsManager -> mavenProjectsManager.isMavenizedModule(module))
+			.orElse(false);
 	}
 	
 	@Override

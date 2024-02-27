@@ -1,8 +1,11 @@
 package software.xdev.openrewriter.ui.toolwindow.execute.panels;
 
 import java.awt.Font;
+import java.awt.event.ItemEvent;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -37,6 +40,17 @@ public abstract class ExecuteRecipeConfigPanel<T> extends JPanel implements Disp
 		return this.valueChangeCallback;
 	}
 	
+	protected <C> void changeValueOnlyOnSelect(
+		final ItemEvent itemEvent,
+		final Function<Object, C> caster,
+		final BiConsumer<T, C> c)
+	{
+		if(itemEvent.getStateChange() == ItemEvent.SELECTED)
+		{
+			this.changeValue(t -> c.accept(t, caster.apply(itemEvent.getItem())));
+		}
+	}
+	
 	protected void changeValue(final Consumer<T> c)
 	{
 		this.ifData(r -> {
@@ -62,6 +76,11 @@ public abstract class ExecuteRecipeConfigPanel<T> extends JPanel implements Disp
 		this.optData = Optional.empty();
 		this.updateFrom(data);
 		this.optData = Optional.of(data);
+		this.afterUpdateFromAndBind(data);
+	}
+	
+	protected void afterUpdateFromAndBind(final T data)
+	{
 	}
 	
 	@Override

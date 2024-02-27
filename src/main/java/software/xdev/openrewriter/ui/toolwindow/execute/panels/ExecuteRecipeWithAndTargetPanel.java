@@ -2,6 +2,7 @@ package software.xdev.openrewriter.ui.toolwindow.execute.panels;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
@@ -10,12 +11,12 @@ import javax.swing.SwingConstants;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 
 import software.xdev.openrewriter.executor.RecipesExecutor;
 import software.xdev.openrewriter.executor.request.ExecutionRequest;
-import software.xdev.openrewriter.executor.request.target.ExecutionTarget;
 import software.xdev.openrewriter.executor.request.target.ExecutionTargetProvider;
 
 
@@ -23,16 +24,22 @@ public class ExecuteRecipeWithAndTargetPanel extends ExecuteRecipeConfigPanel<Ex
 {
 	private final ComboBox<RecipesExecutor> cbExecuteWith = new ComboBox<>();
 	
-	private final PresentableProviderPanel<ExecutionTargetProvider<?>, ExecutionTarget, ExecutionRequest>
-		executionTargetPanel;
+	private final ExecutionTargetProviderPanel executionTargetPanel;
 	
 	public ExecuteRecipeWithAndTargetPanel(final Supplier<Project> projectSupplier)
 	{
-		this.executionTargetPanel = new PresentableProviderPanel<>(
+		this.executionTargetPanel = new ExecutionTargetProviderPanel(
 			projectSupplier,
 			"Type",
 			ExecutionRequest::getTarget,
-			ExecutionRequest::setTarget);
+			ExecutionRequest::setTarget,
+			() -> IntStream.range(0, this.cbExecuteWith.getModel().getSize())
+				.mapToObj(i -> this.cbExecuteWith.getModel().getElementAt(i))
+				.toList(),
+			// Automatically select execution type based on selected project
+			// Only run when data is available (so we are not loading stuff which might result in invalid state)
+			e -> this.ifData(d -> this.cbExecuteWith.setSelectedItem(e)));
+		
 		this.cbExecuteWith.setRenderer((list, value, index, isSelected, cellHasFocus) ->
 			new JLabel(value.name(), value.icon(), SwingConstants.LEADING));
 		
@@ -46,7 +53,8 @@ public class ExecuteRecipeWithAndTargetPanel extends ExecuteRecipeConfigPanel<Ex
 		
 		this.add(this.executionTargetPanel);
 		
-		this.cbExecuteWith.addItemListener(v -> this.changeValue(r -> r.setExecutor((RecipesExecutor)v.getItem())));
+		this.cbExecuteWith.addItemListener(e ->
+			this.changeValueOnlyOnSelect(e, RecipesExecutor.class::cast, ExecutionRequest::setExecutor));
 	}
 	
 	@Override
@@ -70,7 +78,13 @@ public class ExecuteRecipeWithAndTargetPanel extends ExecuteRecipeConfigPanel<Ex
 	{
 		this.cbExecuteWith.setSelectedItem(data.getExecutor());
 		
-		this.executionTargetPanel.updateFrom(data);
+		this.executionTargetPanel.updateFromAndBind(data);
+	}
+	
+	@Override
+	protected void afterUpdateFromAndBind(final ExecutionRequest data)
+	{
+		this.executionTargetPanel.checkForPreferredRecipesExecutor();
 	}
 	
 	public void refreshTargetConfigPanel()

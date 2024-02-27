@@ -25,15 +25,15 @@ import software.xdev.openrewriter.executor.PresentableProvider;
 public class PresentableProviderPanel<P extends PresentableProvider<? extends T>, T, R>
 	extends ExecuteRecipeConfigPanel<R>
 {
-	private final ComboBox<P> cbProvider = new ComboBox<>();
+	protected final ComboBox<P> cbProvider = new ComboBox<>();
 	
-	private final JPanel targetConfigContainerPanel = new JPanel();
-	private ExecuteRecipeConfigPanel<T> targetConfigPanel;
+	protected final JPanel targetConfigContainerPanel = new JPanel();
+	protected ExecuteRecipeConfigPanel<T> targetConfigPanel;
 	
-	private final Map<Class<? extends T>, P> clazzAndProvider = new HashMap<>();
+	protected final Map<Class<? extends T>, P> clazzAndProvider = new HashMap<>();
 	
-	private final Supplier<Project> getProjectSupplier;
-	private final Function<R, T> getFromRootFunc;
+	protected final Supplier<Project> getProjectSupplier;
+	protected final Function<R, T> getFromRootFunc;
 	
 	public PresentableProviderPanel(
 		final Supplier<Project> getProjectSupplier,
@@ -56,9 +56,7 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 			this.cbProvider,
 			this.targetConfigContainerPanel);
 		
-		this.cbProvider.addItemListener(v -> this.changeValue(r -> {
-			final P provider = (P)v.getItem();
-			
+		this.cbProvider.addItemListener(e -> this.changeValueOnlyOnSelect(e, i -> (P)i, (r, provider) -> {
 			this.createNewTargetConfigPanel(provider);
 			
 			final T newData = provider.createDefault(getProjectSupplier.get());
@@ -103,11 +101,21 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 	@Override
 	protected void updateFrom(final R rootData)
 	{
-		final T data = this.getFromRootFunc.apply(rootData);
+		final T data = this.getData(rootData);
 		final P provider = this.clazzAndProvider.get(data.getClass());
 		this.cbProvider.setSelectedItem(provider);
 		this.createNewTargetConfigPanel(provider);
 		this.targetConfigPanel.updateFromAndBind(data);
+	}
+	
+	protected P getCurrentSelected()
+	{
+		return this.cbProvider.getItem();
+	}
+	
+	protected T getData(final R rootData)
+	{
+		return this.getFromRootFunc.apply(rootData);
 	}
 	
 	public void refreshTargetConfigPanel()

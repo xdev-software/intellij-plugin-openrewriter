@@ -29,7 +29,9 @@ import com.intellij.openapi.externalSystem.service.notification.NotificationCate
 import com.intellij.openapi.externalSystem.service.notification.NotificationData;
 import com.intellij.openapi.externalSystem.service.notification.NotificationSource;
 import com.intellij.openapi.externalSystem.task.TaskCallback;
+import com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil;
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 
 import icons.GradleIcons;
@@ -51,6 +53,12 @@ public class GradleRecipesExecutor implements RecipesExecutor
 	public Icon icon()
 	{
 		return GradleIcons.ToolWindowGradle;
+	}
+	
+	@Override
+	public boolean isMatchingModule(final Project project, final Module module)
+	{
+		return ExternalSystemApiUtil.isExternalSystemAwareModule(GradleConstants.SYSTEM_ID, module);
 	}
 	
 	@Override
