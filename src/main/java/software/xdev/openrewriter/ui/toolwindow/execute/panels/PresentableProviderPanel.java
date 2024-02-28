@@ -87,6 +87,8 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 		this.targetConfigPanel.setValueChangeCallback(this.getValueChangeCallback());
 		
 		this.targetConfigContainerPanel.add(this.targetConfigPanel);
+		// Otherwise UI is not updated/rendered correctly
+		this.revalidate();
 	}
 	
 	public void setAvailable(final List<? extends P> providers)
