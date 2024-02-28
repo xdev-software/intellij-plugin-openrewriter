@@ -22,9 +22,18 @@ public final class Icons
 		final Icon icon = getIcon(path);
 		if(icon instanceof final ScalableIcon scalableIcon)
 		{
-			return scalableIcon.scaleToWidth(width);
+			return scaleToWidth(scalableIcon, width);
 		}
 		return icon;
+	}
+	
+	public static Icon scaleToWidth(final ScalableIcon scalableIcon, final float newWidth)
+	{
+		if(newWidth != scalableIcon.getIconWidth())
+		{
+			return scalableIcon.scale(newWidth / scalableIcon.getIconWidth());
+		}
+		return scalableIcon;
 	}
 	
 	private Icons()

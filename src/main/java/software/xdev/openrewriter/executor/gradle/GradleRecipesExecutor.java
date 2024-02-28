@@ -15,13 +15,12 @@ import javax.swing.Icon;
 import org.gradle.cli.CommandLineArgumentException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.gradle.action.GradleExecuteTaskAction;
 import org.jetbrains.plugins.gradle.util.GradleBundle;
-import org.jetbrains.plugins.gradle.util.GradleCommandLine;
 import org.jetbrains.plugins.gradle.util.GradleConstants;
 
 import com.intellij.execution.Executor;
 import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExecutionSettings;
 import com.intellij.openapi.externalSystem.model.execution.ExternalTaskExecutionInfo;
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode;
 import com.intellij.openapi.externalSystem.service.notification.ExternalSystemNotificationManager;
@@ -233,22 +232,24 @@ public class GradleRecipesExecutor implements RecipesExecutor
 			ProgressExecutionMode.IN_BACKGROUND_ASYNC);
 	}
 	
-	@SuppressWarnings("all")
+	@SuppressWarnings("java:S3011")
 	private static ExternalTaskExecutionInfo buildTaskInfo(
 		@NotNull final String projectPath,
 		@NotNull final String fullCommandLine,
 		@Nullable final Executor executor
 	) throws CommandLineArgumentException
 	{
-		final GradleCommandLine commandLine = GradleCommandLine.parse(fullCommandLine);
-		final ExternalSystemTaskExecutionSettings settings = new ExternalSystemTaskExecutionSettings();
-		settings.setExternalProjectPath(projectPath);
-		settings.setTaskNames(commandLine.getTasksAndArguments().toList());
-		settings.setScriptParameters(commandLine.getScriptParameters().toString());
-		settings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.toString());
-		return new ExternalTaskExecutionInfo(
-			settings,
-			executor == null ? DefaultRunExecutor.EXECUTOR_ID : executor.getId());
+		try
+		{
+			final Method mbuildTaskInfo = GradleExecuteTaskAction.class.getDeclaredMethod(
+				"buildTaskInfo", String.class, String.class, Executor.class);
+			mbuildTaskInfo.setAccessible(true);
+			return (ExternalTaskExecutionInfo)mbuildTaskInfo.invoke(null, projectPath, fullCommandLine, executor);
+		}
+		catch(final NoSuchMethodException | IllegalAccessException | InvocationTargetException e)
+		{
+			throw new IllegalStateException("Unable to execute GradleExecuteTaskAction#buildTaskInfo", e);
+		}
 	}
 	// endregion
 }
