@@ -5,14 +5,15 @@
 
 # <img alt="OpenRewriter Plugin icon light" src="./src/main/resources/META-INF/pluginIcon.svg" height="30"> OpenRewriter X
 
-Provides support for [OpenRewrite](https://github.com/openrewrite).
-
-TODO
+Provides support for executing [OpenRewrite](https://github.com/openrewrite) recipes.
 
 <sub>Disclaimer: This is not an official OpenRewrite product and not associated with OpenRewrite</sub>
 
 ## Features
 
+* Execute recipes
+  * with Maven
+  * with Gradle
 
 ## Installation
 [Installation guide for the latest release](https://github.com/xdev-software/intellij-plugin-openrewriter/releases/latest#Installation)

@@ -6,7 +6,7 @@
     <vendor url="https://www.github.com/xdev-software">xdev-software</vendor>
 
     <description><![CDATA[
-Provides support for <a href="https://github.com/openrewrite">OpenRewrite</a>
+Provides support for executing <a href="https://github.com/openrewrite">OpenRewrite</a> recipes.
     ]]></description>
 
     <change-notes><![CDATA[
