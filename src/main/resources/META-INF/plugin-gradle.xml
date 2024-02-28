@@ -6,6 +6,8 @@
 		<requestCommandBuilder
 				implementation="software.xdev.openrewriter.executor.gradle.rcb.GradleModuleExecutionTargetRCB"/>
 		<requestCommandBuilder
+				implementation="software.xdev.openrewriter.executor.gradle.rcb.GradleDirectoryExecutionTargetRCB"/>
+		<requestCommandBuilder
 				implementation="software.xdev.openrewriter.executor.gradle.rcb.GradleSimpleArtifactRecipesDataRCB"/>
 	</extensions>
 </idea-plugin>

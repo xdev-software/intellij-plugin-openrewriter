@@ -56,6 +56,8 @@ Provides support for executing <a href="https://github.com/openrewrite">OpenRewr
     <extensions defaultExtensionNs="software.xdev.openrewriter">
         <executionRequestTargetProvider
                 implementation="software.xdev.openrewriter.executor.request.target.module.ModuleExecutionTargetProvider"/>
+        <executionRequestTargetProvider
+                implementation="software.xdev.openrewriter.executor.request.target.directory.DirectoryExecutionTargetProvider"/>
 
         <recipesDataProvider
                 implementation="software.xdev.openrewriter.executor.request.recipedata.simpleartifact.SimpleArtifactRecipesDataProvider"/>

@@ -6,6 +6,8 @@
 		<requestCommandBuilder
 				implementation="software.xdev.openrewriter.executor.maven.rcb.MavenModuleExecutionTargetRCB"/>
 		<requestCommandBuilder
+				implementation="software.xdev.openrewriter.executor.maven.rcb.MavenDirectoryExecutionTargetRCB"/>
+		<requestCommandBuilder
 				implementation="software.xdev.openrewriter.executor.maven.rcb.MavenSimpleArtifactRecipesDataRCB"/>
 	</extensions>
 </idea-plugin>
