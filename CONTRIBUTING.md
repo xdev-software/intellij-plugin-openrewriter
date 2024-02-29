@@ -28,7 +28,7 @@ You should have the following things installed:
     * [Save Actions](https://plugins.jetbrains.com/plugin/22113) - Provides save actions, like running the formatter or adding ``final`` to fields
     * [SonarLint](https://plugins.jetbrains.com/plugin/7973-sonarlint) - CodeStyle/CodeAnalysis
     * [Checkstyle-IDEA](https://plugins.jetbrains.com/plugin/1065-checkstyle-idea) - CodeStyle/CodeAnalysis
-    * [Plugin DevKit](https://plugins.jetbrains.com/plugin/22851) - Intellij Plugin development
+    * [Plugin DevKit](https://plugins.jetbrains.com/plugin/22851) - IntelliJ Plugin development
   * Import the project
   * Ensure that everything is encoded in ``UTF-8``
   * Ensure that the JDK/Java-Version is correct
@@ -46,7 +46,7 @@ Start idea and import the `build.gradle` file with "File > Open". Then in the "I
 ./gradlew cleanIdea idea
 ```
 
-Intellij should refresh and the project is now configured as a gradle project. You can find Intellij gradle tasks in "Gradle > Gradle projects > intellij-plugin-openrewriter > Tasks > intellij". To run the plugin, use the `runIde` task:
+IntelliJ should refresh and the project is now configured as a gradle project. You can find IntelliJ gradle tasks in "Gradle > Gradle projects > intellij-plugin-openrewriter > Tasks > intellij". To run the plugin, use the `runIde` task:
 
 ```bash
 # Run the plugin (starts new idea)
