@@ -14,6 +14,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 
 import software.xdev.openrewriter.executor.RecipesExecutor;
 import software.xdev.openrewriter.executor.request.target.ExecutionTargetProvider;
@@ -53,8 +54,8 @@ public class ModuleExecutionTargetProvider implements ExecutionTargetProvider<Mo
 	}
 	
 	@Override
-	public Optional<RecipesExecutor> getPreferredForCurrentState(
-		final Collection<RecipesExecutor> recipesExecutors,
+	public Optional<RecipesExecutor<?>> getPreferredForCurrentState(
+		final Collection<RecipesExecutor<?>> recipesExecutors,
 		final ModuleExecutionTarget target,
 		final Project project)
 	{
@@ -95,6 +96,7 @@ public class ModuleExecutionTargetProvider implements ExecutionTargetProvider<Mo
 	
 	private static Stream<Module> getModules(final Project project)
 	{
-		return Arrays.stream(ModuleManager.getInstance(project).getModules());
+		return Arrays.stream(ModuleManager.getInstance(project).getModules())
+			.filter(m -> ProjectUtil.guessModuleDir(m) != null);
 	}
 }

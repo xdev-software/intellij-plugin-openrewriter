@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.ScrollPaneConstants;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +19,9 @@ import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.VerticalFlowLayout;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.panels.HorizontalLayout;
+import com.intellij.ui.components.panels.VerticalLayout;
 
 import software.xdev.openrewriter.executor.RecipesExecutorEPManager;
 import software.xdev.openrewriter.executor.RecipesExecutorService;
@@ -90,11 +93,9 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 		actionGroup.add(this.actionReset);
 		this.setToolbar("OR_EXECUTE_RECIPE", actionGroup);
 		
-		this.dataPanel.setLayout(new VerticalFlowLayout(true, true));
 		this.dataPanel.setAvailable(RecipesExecutorEPManager.recipesDataProviders());
 		
-		this.withAndTargetContainerPanel.setLayout(
-			new VerticalFlowLayout(VerticalFlowLayout.TOP, 0, 0, true, true));
+		this.withAndTargetContainerPanel.setLayout(new VerticalLayout(0));
 		this.withAndTargetContainerPanel.add(this.withAndTargetPanel);
 		
 		this.btnRewrite.addActionListener(this::execInvokedButton);
@@ -104,7 +105,7 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 		buttonBarHl.add(this.btnRewrite, HorizontalLayout.RIGHT);
 		
 		final JPanel buttonBarVl = new JPanel();
-		buttonBarVl.setLayout(new VerticalFlowLayout(VerticalFlowLayout.BOTTOM));
+		buttonBarVl.setLayout(new VerticalFlowLayout());
 		buttonBarVl.add(buttonBarHl);
 		
 		this.withAndTargetContainerPanel.add(buttonBarVl);
@@ -115,10 +116,19 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 		
 		this.rootConfigPanelsStream().forEach(p -> p.setValueChangeCallback(this::updateUIState));
 		
-		super.setContent(this.createSplitter(
-			this.dataPanel,
-			this.withAndTargetContainerPanel,
-			"OR_EXECUTE_RECIPE_PROPORTION_PROPERTY"));
+		final JPanel content = new JPanel();
+		content.setLayout(new VerticalLayout(5));
+		content.add(this.dataPanel);
+		content.add(this.withAndTargetContainerPanel);
+		this.setContent(new JBScrollPane(
+			content,
+			ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
+		
+		// this.setContent(this.createSplitter(
+		// 	this.dataPanel,
+		// 	this.withAndTargetContainerPanel,
+		// 	"OR_EXECUTE_RECIPE_PROPORTION_PROPERTY"));
 	}
 	
 	protected void updateBtnRewriteEnabled()

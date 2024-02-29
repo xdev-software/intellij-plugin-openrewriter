@@ -32,7 +32,11 @@ public final class RecipesExecutorService
 		return new ExecutionRequest(
 			new SimpleArtifactRecipesData(),
 			// Can be null when neither Maven nor Gradle is supported by the IDE
-			RecipesExecutorEPManager.recipesExecutors().stream().findFirst().orElse(null),
+			RecipesExecutorEPManager.recipesExecutors()
+				.stream()
+				.findFirst()
+				.map(exec -> (RecipesExecutorConfig)exec.createDefault(project))
+				.orElse(null),
 			RecipesExecutorEPManager.executionRequestTargetProviders().stream()
 				.findFirst()
 				.orElseThrow()
@@ -46,7 +50,17 @@ public final class RecipesExecutorService
 		final Consumer<Exception> onException,
 		final Runnable onFinally)
 	{
-		final RecipesExecutor recipesExecutor = request.getExecutor();
+		final RecipesExecutor<?> recipesExecutor = RecipesExecutorEPManager.recipesExecutors()
+			.stream()
+			.filter(exec -> exec.matchingClass().isInstance(request.getExecutorConfig()))
+			.findFirst()
+			.orElse(null);
+		
+		if(recipesExecutor == null)
+		{
+			onException.accept(new IllegalStateException("Unable to find matching executor"));
+			return;
+		}
 		
 		final Runnable runnable = () ->
 		{

@@ -26,16 +26,16 @@ public interface ExecutionTargetProvider<T extends ExecutionTarget> extends Pres
 	}
 	
 	@SuppressWarnings("unchecked")
-	default Optional<RecipesExecutor> getPreferredForCurrentStateUnchecked(
-		final Collection<RecipesExecutor> recipesExecutors,
+	default Optional<RecipesExecutor<?>> getPreferredForCurrentStateUnchecked(
+		final Collection<RecipesExecutor<?>> recipesExecutors,
 		final ExecutionTarget target,
 		final Project project)
 	{
 		return this.getPreferredForCurrentState(recipesExecutors, (T)target, project);
 	}
 	
-	default Optional<RecipesExecutor> getPreferredForCurrentState(
-		final Collection<RecipesExecutor> recipesExecutors,
+	default Optional<RecipesExecutor<?>> getPreferredForCurrentState(
+		final Collection<RecipesExecutor<?>> recipesExecutors,
 		final T target,
 		final Project project)
 	{

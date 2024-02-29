@@ -40,6 +40,13 @@ public abstract class ExecuteRecipeConfigPanel<T> extends JPanel implements Disp
 		return this.valueChangeCallback;
 	}
 	
+	protected void changeValueForCheckbox(
+		final ItemEvent itemEvent,
+		final BiConsumer<T, Boolean> c)
+	{
+		this.changeValue(t -> c.accept(t, itemEvent.getStateChange() == ItemEvent.SELECTED));
+	}
+	
 	protected <C> void changeValueOnlyOnSelect(
 		final ItemEvent itemEvent,
 		final Function<Object, C> caster,

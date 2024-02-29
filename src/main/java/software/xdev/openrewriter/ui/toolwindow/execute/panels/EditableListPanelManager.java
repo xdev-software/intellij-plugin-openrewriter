@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -58,6 +59,7 @@ public class EditableListPanelManager<T extends Comparable<T>>
 		this.inputValidator = inputValidator;
 		
 		this.jbList = new JBList<>(this.model);
+		this.jbList.setVisibleRowCount(4);
 		this.jbList.setCellRenderer(new DefaultListCellRenderer()
 		{
 			@SuppressWarnings("unchecked")
@@ -77,7 +79,8 @@ public class EditableListPanelManager<T extends Comparable<T>>
 					cellHasFocus);
 			}
 		});
-		this.jbList.setEmptyText(emptyText);
+		Stream.of(emptyText.split("\\n"))
+			.forEach(this.jbList.getEmptyText()::appendLine);
 		
 		this.panel = ToolbarDecorator.createDecorator(this.jbList)
 			.setAddAction(this.getAddActionButtonRunnable())

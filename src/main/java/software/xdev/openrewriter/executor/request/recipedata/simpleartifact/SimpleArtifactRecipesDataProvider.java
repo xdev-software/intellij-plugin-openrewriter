@@ -54,7 +54,7 @@ public class SimpleArtifactRecipesDataProvider implements RecipesDataProvider<Si
 		@SuppressWarnings("java:S1192")
 		private final EditableListPanelManager<Artifact> artifactPanelManager = new EditableListPanelManager<>(
 			"Artifacts",
-			"No artifacts / Only built-in recipes available",
+			"No artifacts\nOnly built-in recipes available",
 			"Add artifact",
 			"Edit artifact",
 			// @formatter:off

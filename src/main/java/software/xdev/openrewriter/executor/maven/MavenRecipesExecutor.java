@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.swing.Icon;
 
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.idea.maven.execution.MavenRunConfigurationType;
 import org.jetbrains.idea.maven.execution.MavenRunnerParameters;
 import org.jetbrains.idea.maven.execution.MavenRunnerSettings;
@@ -19,9 +20,10 @@ import software.xdev.openrewriter.executor.RecipesExecutor;
 import software.xdev.openrewriter.executor.RequestCommandBuilder;
 import software.xdev.openrewriter.executor.maven.rcb.MavenRequestCommandBuilder;
 import software.xdev.openrewriter.executor.request.ExecutionRequest;
+import software.xdev.openrewriter.ui.toolwindow.execute.panels.ExecuteRecipeConfigPanel;
 
 
-public class MavenRecipesExecutor implements RecipesExecutor
+public class MavenRecipesExecutor implements RecipesExecutor<MavenRecipesExecutorConfig>
 {
 	@Override
 	public String name()
@@ -52,7 +54,7 @@ public class MavenRecipesExecutor implements RecipesExecutor
 	}
 	
 	@Override
-	public void execute(final Project project, final ExecutionRequest request)
+	public void execute(final Project project, final ExecutionRequest request, final MavenRecipesExecutorConfig config)
 	{
 		final MavenRunnerParameters runnerParameters = new MavenRunnerParameters();
 		final MavenGeneralSettings generalSettings = new MavenGeneralSettings();
@@ -76,5 +78,24 @@ public class MavenRecipesExecutor implements RecipesExecutor
 			generalSettings,
 			runnerSettings,
 			null);
+	}
+	
+	@Override
+	public MavenRecipesExecutorConfig createDefault(final Project project)
+	{
+		return new MavenRecipesExecutorConfig();
+	}
+	
+	@Override
+	public Class<MavenRecipesExecutorConfig> matchingClass()
+	{
+		return MavenRecipesExecutorConfig.class;
+	}
+	
+	@Override
+	@Nullable
+	public ExecuteRecipeConfigPanel<? extends MavenRecipesExecutorConfig> createConfigPanel(final Project project)
+	{
+		return null;
 	}
 }

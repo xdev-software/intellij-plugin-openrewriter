@@ -1,17 +1,13 @@
 package software.xdev.openrewriter.executor;
 
-import javax.swing.Icon;
-
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 
 import software.xdev.openrewriter.executor.request.ExecutionRequest;
 
 
-public interface RecipesExecutor extends Provider
+public interface RecipesExecutor<T extends RecipesExecutorConfig> extends PresentableProvider<T>
 {
-	Icon icon();
-	
 	default boolean isAsync()
 	{
 		return true;
@@ -19,5 +15,11 @@ public interface RecipesExecutor extends Provider
 	
 	boolean isMatchingModule(Project project, Module module);
 	
-	void execute(Project project, ExecutionRequest request);
+	@SuppressWarnings("unchecked")
+	default void execute(final Project project, final ExecutionRequest request)
+	{
+		this.execute(project, request, (T)request.getExecutorConfig());
+	}
+	
+	void execute(Project project, ExecutionRequest request, T config);
 }

@@ -1,5 +1,7 @@
 package software.xdev.openrewriter.ui.toolwindow.execute.panels;
 
+import java.awt.Component;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +13,14 @@ import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.VerticalFlowLayout;
+import com.intellij.ui.components.panels.VerticalLayout;
 
 import software.xdev.openrewriter.executor.PresentableProvider;
 
@@ -44,11 +48,10 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 		this.getProjectSupplier = getProjectSupplier;
 		this.getFromRootFunc = getFromRootFunc;
 		
-		this.setLayout(new VerticalFlowLayout(0, 0));
+		this.setLayout(new VerticalLayout(0));
 		
 		// UI
-		this.cbProvider.setRenderer((list, value, index, isSelected, cellHasFocus) ->
-			new JLabel(value.name(), value.icon(), SwingConstants.LEADING));
+		this.cbProvider.setRenderer(this::cbProviderRenderer);
 		this.targetConfigContainerPanel.setLayout(this.createVerticalFlowLayout(0));
 		
 		this.addWithVerticalLayout(
@@ -61,8 +64,21 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 			
 			final T newData = provider.createDefault(getProjectSupplier.get());
 			setIntoRootFunc.accept(r, newData);
-			this.targetConfigPanel.updateFromAndBind(newData);
+			if(this.targetConfigPanel != null)
+			{
+				this.targetConfigPanel.updateFromAndBind(newData);
+			}
 		}));
+	}
+	
+	protected Component cbProviderRenderer(
+		final JList<? extends P> list,
+		final P value,
+		final int index,
+		final boolean isSelected,
+		final boolean cellHasFocus)
+	{
+		return new JLabel(value.name(), value.icon(), SwingConstants.LEADING);
 	}
 	
 	protected VerticalFlowLayout createVerticalFlowLayout(final int vGap)
@@ -83,10 +99,13 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 		// Create a new panel
 		this.targetConfigPanel =
 			(ExecuteRecipeConfigPanel<T>)provider.createConfigPanel(this.getProjectSupplier.get());
-		this.targetConfigPanel.setLayout(this.createVerticalFlowLayout(5));
-		this.targetConfigPanel.setValueChangeCallback(this.getValueChangeCallback());
-		
-		this.targetConfigContainerPanel.add(this.targetConfigPanel);
+		if(this.targetConfigPanel != null)
+		{
+			this.targetConfigPanel.setLayout(this.createVerticalFlowLayout(5));
+			this.targetConfigPanel.setValueChangeCallback(this.getValueChangeCallback());
+			
+			this.targetConfigContainerPanel.add(this.targetConfigPanel);
+		}
 		// Otherwise UI is not updated/rendered correctly
 		this.revalidate();
 	}
@@ -100,6 +119,11 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 		this.cbProvider.setModel(new DefaultComboBoxModel<>(new Vector<>(providers)));
 	}
 	
+	public Collection<P> getAvailable()
+	{
+		return this.clazzAndProvider.values();
+	}
+	
 	@Override
 	protected void updateFrom(final R rootData)
 	{
@@ -107,7 +131,15 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 		final P provider = this.clazzAndProvider.get(data.getClass());
 		this.cbProvider.setSelectedItem(provider);
 		this.createNewTargetConfigPanel(provider);
-		this.targetConfigPanel.updateFromAndBind(data);
+		if(this.targetConfigPanel != null)
+		{
+			this.targetConfigPanel.updateFromAndBind(data);
+		}
+	}
+	
+	public void select(final P provider)
+	{
+		this.cbProvider.setSelectedItem(provider);
 	}
 	
 	protected P getCurrentSelected()
@@ -122,6 +154,9 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 	
 	public void refreshTargetConfigPanel()
 	{
-		this.targetConfigPanel.ifData(this.targetConfigPanel::updateFrom);
+		if(this.targetConfigPanel != null)
+		{
+			this.targetConfigPanel.ifData(this.targetConfigPanel::updateFrom);
+		}
 	}
 }

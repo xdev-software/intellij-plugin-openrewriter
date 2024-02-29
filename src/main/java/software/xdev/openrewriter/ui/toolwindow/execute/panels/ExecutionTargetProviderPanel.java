@@ -22,16 +22,16 @@ public class ExecutionTargetProviderPanel
 	extends PresentableProviderPanel<ExecutionTargetProvider<?>, ExecutionTarget, ExecutionRequest>
 {
 	protected final Map<ExecutionTargetProvider<?>, Boolean> preferredForCurrentStateOverridden = new WeakHashMap<>();
-	protected final Supplier<Collection<RecipesExecutor>> recipeExecutorsSupplier;
-	protected final Consumer<RecipesExecutor> onPreferredRecipesExecutor;
+	protected final Supplier<Collection<RecipesExecutor<?>>> recipeExecutorsSupplier;
+	protected final Consumer<RecipesExecutor<?>> onPreferredRecipesExecutor;
 	
 	public ExecutionTargetProviderPanel(
 		final Supplier<Project> getProjectSupplier,
 		final String lblText,
 		final Function<ExecutionRequest, ExecutionTarget> getFromRootFunc,
 		final BiConsumer<ExecutionRequest, ExecutionTarget> setIntoRootFunc,
-		final Supplier<Collection<RecipesExecutor>> recipeExecutorsSupplier,
-		final Consumer<RecipesExecutor> onPreferredRecipesExecutor)
+		final Supplier<Collection<RecipesExecutor<?>>> recipeExecutorsSupplier,
+		final Consumer<RecipesExecutor<?>> onPreferredRecipesExecutor)
 	{
 		super(getProjectSupplier, lblText, getFromRootFunc, setIntoRootFunc);
 		this.recipeExecutorsSupplier = recipeExecutorsSupplier;

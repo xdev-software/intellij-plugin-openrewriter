@@ -2,7 +2,7 @@ package software.xdev.openrewriter.executor.request;
 
 import java.util.Objects;
 
-import software.xdev.openrewriter.executor.RecipesExecutor;
+import software.xdev.openrewriter.executor.RecipesExecutorConfig;
 import software.xdev.openrewriter.executor.request.recipedata.RecipesData;
 import software.xdev.openrewriter.executor.request.target.ExecutionTarget;
 
@@ -11,17 +11,17 @@ public class ExecutionRequest implements CanExecute
 {
 	private RecipesData recipesData;
 	
-	private RecipesExecutor executor;
+	private RecipesExecutorConfig executorConfig;
 	
 	private ExecutionTarget target;
 	
 	public ExecutionRequest(
 		final RecipesData recipesData,
-		final RecipesExecutor executor,
+		final RecipesExecutorConfig executorConfig,
 		final ExecutionTarget target)
 	{
 		this.setRecipesData(recipesData);
-		this.setExecutor(executor);
+		this.setExecutorConfig(executorConfig);
 		this.setTarget(target);
 	}
 	
@@ -35,14 +35,14 @@ public class ExecutionRequest implements CanExecute
 		this.recipesData = Objects.requireNonNull(recipesData);
 	}
 	
-	public RecipesExecutor getExecutor()
+	public RecipesExecutorConfig getExecutorConfig()
 	{
-		return this.executor;
+		return this.executorConfig;
 	}
 	
-	public void setExecutor(final RecipesExecutor executor)
+	public void setExecutorConfig(final RecipesExecutorConfig executorConfig)
 	{
-		this.executor = executor;
+		this.executorConfig = executorConfig;
 	}
 	
 	public ExecutionTarget getTarget()
@@ -58,6 +58,8 @@ public class ExecutionRequest implements CanExecute
 	@Override
 	public boolean canExecute()
 	{
-		return this.getRecipesData().canExecute() && this.getExecutor() != null && this.getTarget().canExecute();
+		return this.getRecipesData().canExecute()
+			&& this.getExecutorConfig() != null
+			&& this.getTarget().canExecute();
 	}
 }
