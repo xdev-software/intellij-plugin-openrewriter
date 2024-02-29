@@ -7,13 +7,23 @@
 
 Provides support for executing [OpenRewrite](https://github.com/openrewrite) recipes.
 
-<sub>Disclaimer: This is not an official OpenRewrite product and not associated with OpenRewrite</sub>
+<img alt="Demo" src="assets/demo.png" height="500" />
 
 ## Features
 
 * Execute recipes
-  * with Maven
-  * with Gradle
+  * with
+    * Maven
+    * Gradle
+  * on a
+    * (project) module
+    * external directory
+
+<details>
+  <summary>Show demo</summary>
+  
+  ![demo](assets/demo.avif)
+</details>
 
 ## Installation
 [Installation guide for the latest release](https://github.com/xdev-software/intellij-plugin-openrewriter/releases/latest#Installation)
@@ -24,3 +34,5 @@ Provides support for executing [OpenRewrite](https://github.com/openrewrite) rec
 
 ## Contributing
 See the [contributing guide](./CONTRIBUTING.md) for detailed instructions on how to get started with our project.
+
+<sub>Disclaimer: This is not an official OpenRewrite product and not associated with OpenRewrite</sub>
