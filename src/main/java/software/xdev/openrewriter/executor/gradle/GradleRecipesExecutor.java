@@ -304,8 +304,7 @@ public class GradleRecipesExecutor implements RecipesExecutor<GradleRecipesExecu
 	{
 		try
 		{
-			final Method mbuildTaskInfo = GradleExecuteTaskAction.class.getDeclaredMethod(
-				"buildTaskInfo", String.class, String.class, Executor.class);
+			final Method mbuildTaskInfo = getMBuildTaskInfo();
 			mbuildTaskInfo.setAccessible(true);
 			return (ExternalTaskExecutionInfo)mbuildTaskInfo.invoke(null, projectPath, fullCommandLine, executor);
 		}
@@ -313,6 +312,15 @@ public class GradleRecipesExecutor implements RecipesExecutor<GradleRecipesExecu
 		{
 			throw new IllegalStateException("Unable to execute GradleExecuteTaskAction#buildTaskInfo", e);
 		}
+	}
+	
+	static Method getMBuildTaskInfo() throws NoSuchMethodException
+	{
+		return GradleExecuteTaskAction.class.getDeclaredMethod(
+			"buildTaskInfo",
+			String.class,
+			String.class,
+			Executor.class);
 	}
 	// endregion
 	
