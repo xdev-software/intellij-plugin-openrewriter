@@ -124,11 +124,6 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 			content,
 			ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
-		
-		// this.setContent(this.createSplitter(
-		// 	this.dataPanel,
-		// 	this.withAndTargetContainerPanel,
-		// 	"OR_EXECUTE_RECIPE_PROPORTION_PROPERTY"));
 	}
 	
 	protected void updateBtnRewriteEnabled()
