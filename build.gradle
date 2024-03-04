@@ -99,6 +99,16 @@ test {
     useJUnitPlatform()
 }
 
+sonar {
+    properties {
+        // Ignore sonar warnings globally
+        property 'sonar.issue.ignore.multicriteria', 'S1948'
+        // Ignore serialization waring as it's only relevant for RMI which is not used
+        property 'sonar.issue.ignore.multicriteria.S1948.ruleKey', 'java:S1948'
+        property 'sonar.issue.ignore.multicriteria.S1948.resourceKey', '**/*.java'
+    }
+}
+
 // Add resources directory because intellij test framework checks there for test resources (instead of build/resources)
 sourceSets {
     test.output.resourcesDir = "build/classes/java/resources"
