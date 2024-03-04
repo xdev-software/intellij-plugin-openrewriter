@@ -1,7 +1,12 @@
 package software.xdev.openrewriter.ui.toolwindow;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
 import javax.swing.Box;
-import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +17,6 @@ import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
-import com.intellij.ui.JBSplitter;
 
 
 public class ORSimpleToolWindowPanel extends SimpleToolWindowPanel implements Disposable, DumbAware
@@ -20,11 +24,6 @@ public class ORSimpleToolWindowPanel extends SimpleToolWindowPanel implements Di
 	private Project project;
 	
 	private ActionToolbar toolbar;
-	
-	public ORSimpleToolWindowPanel(final boolean vertical)
-	{
-		super(vertical);
-	}
 	
 	public ORSimpleToolWindowPanel(final boolean vertical, final boolean borderless)
 	{
@@ -39,52 +38,6 @@ public class ORSimpleToolWindowPanel extends SimpleToolWindowPanel implements Di
 	public void setProject(final Project project)
 	{
 		this.project = project;
-	}
-	
-	@SuppressWarnings("checkstyle:MagicNumber")
-	protected JBSplitter createSplitter(
-		final JComponent c1,
-		final JComponent c2,
-		final String proportionProperty)
-	{
-		return this.createSplitter(
-			c1,
-			c2,
-			proportionProperty,
-			0.5f);
-	}
-	
-	protected JBSplitter createSplitter(
-		final JComponent c1,
-		final JComponent c2,
-		final String proportionProperty,
-		final float defaultSplit)
-	{
-		return this.createSplitter(
-			this,
-			this,
-			c1,
-			c2,
-			proportionProperty,
-			defaultSplit);
-	}
-	
-	protected JBSplitter createSplitter(
-		final JComponent parentComponent,
-		final Disposable parentDisposable,
-		final JComponent c1,
-		final JComponent c2,
-		final String proportionProperty,
-		final float defaultSplit)
-	{
-		return ORToolWindowUIUtil.createSplitter(
-			this::getProject,
-			parentComponent,
-			parentDisposable,
-			c1,
-			c2,
-			proportionProperty,
-			defaultSplit);
 	}
 	
 	protected <T> T getService(@NotNull final Class<T> serviceClass)
@@ -111,9 +64,72 @@ public class ORSimpleToolWindowPanel extends SimpleToolWindowPanel implements Di
 		this.toolbar.getComponent().setVisible(true);
 	}
 	
+	private static final Consumer<ActionToolbar> REFRESH_TOOLBAR_RUNNABLE = buildRefreshToolbarRunnable();
+	
+	static Consumer<ActionToolbar> buildRefreshToolbarRunnable()
+	{
+		Optional<BiConsumer<ActionToolbar, Exception>> fallback;
+		try
+		{
+			// Deprecated since 241
+			final Method mUpdateActionsImmediately =
+				ActionToolbar.class.getDeclaredMethod("updateActionsImmediately");
+			
+			fallback = Optional.of((tb, cause) -> {
+				try
+				{
+					mUpdateActionsImmediately.invoke(tb);
+				}
+				catch(final IllegalAccessException | InvocationTargetException e)
+				{
+					final RuntimeException ex = new RuntimeException("Failed to invoke updateActionsImmediately", e);
+					if(cause != null)
+					{
+						ex.addSuppressed(cause);
+					}
+					throw ex;
+				}
+			});
+		}
+		catch(final NoSuchMethodException e)
+		{
+			fallback = Optional.empty();
+		}
+		
+		final Optional<BiConsumer<ActionToolbar, Exception>> finalFallback = fallback;
+		
+		try
+		{
+			// Only available since 241
+			final Method mUpdateActionsAsync = ActionToolbar.class.getDeclaredMethod("updateActionsAsync");
+			
+			return tb -> {
+				try
+				{
+					mUpdateActionsAsync.invoke(tb);
+				}
+				catch(final IllegalAccessException | InvocationTargetException e)
+				{
+					final RuntimeException ex = new RuntimeException("Failed to invoke updateActionsAsync", e);
+					finalFallback.ifPresentOrElse(
+						f -> f.accept(tb, ex),
+						() -> {
+							throw ex;
+						});
+				}
+			};
+		}
+		catch(final NoSuchMethodException e)
+		{
+			return finalFallback
+				.map(f -> (Consumer<ActionToolbar>)tb -> f.accept(tb, null))
+				.orElseThrow();
+		}
+	}
+	
 	protected void refreshToolbar()
 	{
-		this.toolbar.updateActionsImmediately();
+		REFRESH_TOOLBAR_RUNNABLE.accept(this.toolbar);
 	}
 	
 	@Override

@@ -21,6 +21,7 @@
     <!-- https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html -->
     <idea-version since-build="231"/>
 
+    <depends>com.intellij.modules.platform</depends>
     <depends optional="true" config-file="plugin-maven.xml">org.jetbrains.idea.maven</depends>
     <depends optional="true" config-file="plugin-gradle.xml">org.jetbrains.plugins.gradle</depends>
 
