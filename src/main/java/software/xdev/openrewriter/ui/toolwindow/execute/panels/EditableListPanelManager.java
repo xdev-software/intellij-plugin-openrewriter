@@ -39,6 +39,7 @@ public class EditableListPanelManager<T extends Comparable<T>>
 	private final Function<T, String> toPresentation;
 	private final Function<String, T> toModel;
 	
+	@SuppressWarnings("java:S107")
 	public EditableListPanelManager(
 		final String title,
 		final String emptyText,
