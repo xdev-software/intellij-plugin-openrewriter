@@ -10,7 +10,7 @@
 <br/>
 <p>Allows running OpenRewrite recipes with Maven and Gradle on project modules or external directories out of the IDE.</p>
 <br/>
-<p>More information is available on <a href="https://github.com/xdev-software/intellij-plugin-save-actions">GitHub</a>.</p>
+<p>More information is available on <a href="https://github.com/xdev-software/intellij-plugin-openrewriter">GitHub</a>.</p>
     ]]></description>
 
     <change-notes><![CDATA[
