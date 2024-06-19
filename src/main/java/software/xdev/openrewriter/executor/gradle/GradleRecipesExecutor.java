@@ -295,12 +295,14 @@ public class GradleRecipesExecutor implements RecipesExecutor<GradleRecipesExecu
 			ProgressExecutionMode.IN_BACKGROUND_ASYNC);
 	}
 	
+	/**
+	 * @throws CommandLineArgumentException
+	 */
 	@SuppressWarnings("java:S3011")
 	private static ExternalTaskExecutionInfo buildTaskInfo(
 		@NotNull final String projectPath,
 		@NotNull final String fullCommandLine,
-		@Nullable final Executor executor
-	) throws CommandLineArgumentException
+		@Nullable final Executor executor)
 	{
 		try
 		{
