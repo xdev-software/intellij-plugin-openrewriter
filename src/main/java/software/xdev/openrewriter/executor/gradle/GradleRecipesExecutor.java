@@ -19,7 +19,6 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.gradle.cli.CommandLineArgumentException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.gradle.action.GradleExecuteTaskAction;
@@ -272,7 +271,7 @@ public class GradleRecipesExecutor implements RecipesExecutor<GradleRecipesExecu
 		{
 			taskExecutionInfo = buildTaskInfo(workDirectory, fullCommandLine, executor);
 		}
-		catch(final CommandLineArgumentException ex)
+		catch(final RuntimeException ex)
 		{
 			final String italicFormat = "<i>%s</i> \n";
 			final NotificationData notificationData = new NotificationData(
@@ -295,9 +294,6 @@ public class GradleRecipesExecutor implements RecipesExecutor<GradleRecipesExecu
 			ProgressExecutionMode.IN_BACKGROUND_ASYNC);
 	}
 	
-	/**
-	 * @throws CommandLineArgumentException
-	 */
 	@SuppressWarnings("java:S3011")
 	private static ExternalTaskExecutionInfo buildTaskInfo(
 		@NotNull final String projectPath,
