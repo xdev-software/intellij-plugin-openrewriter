@@ -1,5 +1,5 @@
 [![Latest version](https://img.shields.io/jetbrains/plugin/v/23896?logo=jetbrains)](https://plugins.jetbrains.com/plugin/23896)
-[![Build](https://img.shields.io/github/actions/workflow/status/xdev-software/intellij-plugin-openrewriter/checkBuild.yml?branch=develop)](https://github.com/xdev-software/intellij-plugin-openrewriter/actions/workflows/checkBuild.yml?query=branch%3Adevelop)
+[![Build](https://img.shields.io/github/actions/workflow/status/xdev-software/intellij-plugin-openrewriter/check-build.yml?branch=develop)](https://github.com/xdev-software/intellij-plugin-openrewriter/actions/workflows/check-build.yml?query=branch%3Adevelop)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=xdev-software_intellij-plugin-openrewriter&metric=alert_status)](https://sonarcloud.io/dashboard?id=xdev-software_intellij-plugin-openrewriter)
 [![Feel free to leave a rating](https://img.shields.io/jetbrains/plugin/r/rating/23896?style=social&logo=jetbrains&label=Feel%20free%20to%20leave%20a%20rating)](https://plugins.jetbrains.com/plugin/23896/reviews)
 
