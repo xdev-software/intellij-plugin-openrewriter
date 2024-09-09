@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<idea-plugin>
+    <id>software.xdev.openrewriter</id>
+    <name>OpenRewriter X</name>
+    <vendor url="https://www.github.com/xdev-software">xdev-software</vendor>
+
+    <description><![CDATA[
+<p>Provides support for executing <a href="https://github.com/openrewrite">OpenRewrite</a> recipes.</p>
+<br/>
+<p>Allows running OpenRewrite recipes with Maven and Gradle on project modules or external directories out of the IDE.</p>
+<br/>
+<p>More information is available on <a href="https://github.com/xdev-software/intellij-plugin-openrewriter">GitHub</a>.</p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+<a href="https://github.com/xdev-software/intellij-plugin-openrewriter/releases">https://github.com/xdev-software/intellij-plugin-openrewriter/releases</a>
+    ]]>
+    </change-notes>
+
+    <!-- https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html -->
+    <idea-version since-build="241"/>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends optional="true" config-file="plugin-maven.xml">org.jetbrains.idea.maven</depends>
+    <depends optional="true" config-file="plugin-gradle.xml">org.jetbrains.plugins.gradle</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="OpenRewriter"
+                    anchor="right"
+                    factoryClass="software.xdev.openrewriter.ui.toolwindow.ORToolWindowFactory"
+                    icon="software.xdev.openrewriter.ui.Icons.PLUGIN_13"/>
+
+        <notificationGroup id="OpenRewriter"
+                           displayType="BALLOON"/>
+
+        <notificationGroup id="OpenRewriter: Rewrite successful"
+                           displayType="NONE"/>
+        <notificationGroup id="OpenRewriter: Rewrite failed"
+                           displayType="STICKY_BALLOON"/>
+    </extensions>
+
+    <extensionPoints>
+        <extensionPoint name="recipesExecutor"
+                        interface="software.xdev.openrewriter.executor.RecipesExecutor"
+                        dynamic="true"/>
+
+        <extensionPoint name="executionRequestTargetProvider"
+                        interface="software.xdev.openrewriter.executor.request.target.ExecutionTargetProvider"
+                        dynamic="true"/>
+
+        <extensionPoint name="recipesDataProvider"
+                        interface="software.xdev.openrewriter.executor.request.recipedata.RecipesDataProvider"
+                        dynamic="true"/>
+
+        <extensionPoint name="requestCommandBuilder"
+                        interface="software.xdev.openrewriter.executor.RequestCommandBuilder"
+                        dynamic="true"/>
+    </extensionPoints>
+
+    <extensions defaultExtensionNs="software.xdev.openrewriter">
+        <executionRequestTargetProvider
+                implementation="software.xdev.openrewriter.executor.request.target.module.ModuleExecutionTargetProvider"/>
+        <executionRequestTargetProvider
+                implementation="software.xdev.openrewriter.executor.request.target.directory.DirectoryExecutionTargetProvider"/>
+
+        <recipesDataProvider
+                implementation="software.xdev.openrewriter.executor.request.recipedata.simpleartifact.SimpleArtifactRecipesDataProvider"/>
+    </extensions>
+
+    <actions>
+        <group id="OpenRewriter.ProjectMenu"
+               class="software.xdev.openrewriter.ui.group.ProjectMenuGroup"
+               popup="true"
+               icon="software.xdev.openrewriter.ui.Icons.PLUGIN_13"
+               text="OpenRewriter">
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+        </group>
+
+        <group id="OpenRewriter.ToolsMenu"
+               class="software.xdev.openrewriter.ui.group.ToolsMenuGroup"
+               popup="true"
+               icon="software.xdev.openrewriter.ui.Icons.PLUGIN_13"
+               text="OpenRewriter">
+            <add-to-group group-id="ToolsMenu"/>
+        </group>
+
+        <action class="software.xdev.openrewriter.ui.action.OpenExecuteRecipeAction"
+                icon="software.xdev.openrewriter.ui.Icons.PLUGIN_13"
+                text="Execute Recipe...">
+            <add-to-group group-id="OpenRewriter.ProjectMenu"/>
+            <add-to-group group-id="OpenRewriter.ToolsMenu"/>
+        </action>
+    </actions>
+
+</idea-plugin>
