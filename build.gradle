@@ -48,7 +48,8 @@ configurations.checkstyle {
 dependencies {
     intellijPlatform {
         create(properties("platformType"), properties("platformVersion"))
-        bundledPlugins(properties("platformPlugins").map { it.split(",").collect { it.trim() }.findAll { !it.empty } })
+        bundledPlugins(properties("platformBundledPlugins").map { it.split(",").collect { it.trim() }.findAll { !it.empty } })
+        plugins(properties("platformPlugins").map { it.split(",").collect { it.trim() }.findAll { !it.empty } })
         pluginVerifier()
         zipSigner()
         instrumentationTools()
