@@ -19,7 +19,7 @@
     </change-notes>
 
     <!-- https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html -->
-    <idea-version since-build="241"/>
+    <idea-version since-build="242"/>
 
     <depends>com.intellij.modules.platform</depends>
     <depends optional="true" config-file="plugin-maven.xml">org.jetbrains.idea.maven</depends>
