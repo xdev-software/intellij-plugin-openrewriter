@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <idea-plugin>
-    <id>software.xdev.openrewriter</id>
-    <name>OpenRewriter X</name>
     <vendor url="https://www.github.com/xdev-software">xdev-software</vendor>
 
     <description><![CDATA[
@@ -17,9 +15,6 @@
 <a href="https://github.com/xdev-software/intellij-plugin-openrewriter/releases">https://github.com/xdev-software/intellij-plugin-openrewriter/releases</a>
     ]]>
     </change-notes>
-
-    <!-- https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html -->
-    <idea-version since-build="232"/>
 
     <depends>com.intellij.modules.platform</depends>
     <depends optional="true" config-file="plugin-maven.xml">org.jetbrains.idea.maven</depends>

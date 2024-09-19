@@ -110,6 +110,7 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 		this.revalidate();
 	}
 	
+	@SuppressWarnings("PMD.UseArrayListInsteadOfVector") // Required by underlying API
 	public void setAvailable(final List<? extends P> providers)
 	{
 		this.clazzAndProvider.clear();
