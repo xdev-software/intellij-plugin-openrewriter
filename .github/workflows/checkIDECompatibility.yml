@@ -51,4 +51,4 @@ jobs:
         java-version: ${{ matrix.java }}
       
     - name: Check compatibility
-      run: ./gradlew runPluginVerifier -PplatformVersion=LATEST-EAP-SNAPSHOT --info
+      run: ./gradlew verifyPlugin -PplatformVersion=LATEST-EAP-SNAPSHOT --info
