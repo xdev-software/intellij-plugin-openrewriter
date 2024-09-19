@@ -9,6 +9,7 @@ plugins {
 
 ext {
     checkstyleVersion = '10.18.1'
+    pmdVersion = '7.5.0'
 }
 
 def properties(String key) {
@@ -53,6 +54,8 @@ dependencies {
         instrumentationTools()
     }
     checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
+    pmd "net.sourceforge.pmd:pmd-ant:${pmdVersion}",
+            "net.sourceforge.pmd:pmd-java:${pmdVersion}"
     testImplementation platform('org.junit:junit-bom:5.11.0'),
             'org.junit.jupiter:junit-jupiter',
             'org.junit.jupiter:junit-jupiter-engine',
@@ -108,6 +111,7 @@ checkstyle {
 pmd {
     consoleOutput = true
     ruleSetFiles = files(".config/pmd/ruleset.xml")
+    toolVersion = pmdVersion
 }
 
 tasks.withType(Checkstyle).configureEach {
