@@ -13,7 +13,6 @@ classes
 
 # Plugins
 *.idea/checkstyle-idea.xml
-.intellijPlatform
 
 # Gradle
 .gradle/
