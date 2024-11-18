@@ -68,7 +68,7 @@ public class DirectoryExecutionTargetProvider implements ExecutionTargetProvider
 			this.field.setEnabled(false);
 			
 			final TextFieldWithBrowseButton resultPath = new TextFieldWithBrowseButton(this.field);
-			resultPath.addBrowseFolderListener(null, null, null, descriptor, TEXT_FIELD_WHOLE_TEXT);
+			resultPath.addBrowseFolderListener(null, descriptor, TEXT_FIELD_WHOLE_TEXT);
 			
 			this.add(resultPath);
 			

@@ -13,11 +13,13 @@ classes
 
 # Plugins
 *.idea/checkstyle-idea.xml
-.intellijPlatform
 
 # Gradle
 .gradle/
 build/
+
+# IntelliJ Platform Plugin
+.intellijPlatform
 
 
 # Some files are user/installation independent and are used for configuring the IDE
