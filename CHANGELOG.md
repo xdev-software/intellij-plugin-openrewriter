@@ -1,3 +1,7 @@
+# 1.0.3
+* Drop support for IntelliJ < 2024.3
+  * This is required to fix deprecations
+
 # 1.0.2
 * Drop support for IntelliJ < 2024.2
 * Removed deprecated code that was only required for older IDE versions
