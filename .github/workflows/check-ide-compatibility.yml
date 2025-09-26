@@ -37,7 +37,7 @@ jobs:
         for p in "${paths_to_wipe[@]}"
         do
           echo "Clearing $p"
-          rm -rf $p || true
+          sudo rm -rf $p || true
         done
         sudo df -h
 
