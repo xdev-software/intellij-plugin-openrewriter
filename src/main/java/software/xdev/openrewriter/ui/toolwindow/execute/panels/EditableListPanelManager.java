@@ -29,6 +29,7 @@ public class EditableListPanelManager<T extends Comparable<T>>
 {
 	private Set<T> data = new HashSet<>();
 	private final SortedListModel model = new SortedListModel();
+	@SuppressWarnings("checkstyle:IllegalIdentifierName")
 	private final JBList<T> jbList;
 	private final JPanel panel;
 	private final String titleAdd;
