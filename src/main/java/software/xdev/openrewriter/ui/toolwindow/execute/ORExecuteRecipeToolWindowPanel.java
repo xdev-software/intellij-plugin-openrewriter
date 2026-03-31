@@ -31,7 +31,7 @@ import software.xdev.openrewriter.executor.request.recipedata.RecipesDataProvide
 import software.xdev.openrewriter.executor.request.target.module.ModuleExecutionTarget;
 import software.xdev.openrewriter.executor.request.target.module.ModuleExecutionTargetProvider;
 import software.xdev.openrewriter.ui.NotificationService;
-import software.xdev.openrewriter.ui.UIThreadUtil;
+import software.xdev.openrewriter.ui.UIThreadAccessor;
 import software.xdev.openrewriter.ui.toolwindow.ORSimpleToolWindowPanel;
 import software.xdev.openrewriter.ui.toolwindow.execute.panels.ExecuteRecipeConfigPanel;
 import software.xdev.openrewriter.ui.toolwindow.execute.panels.ExecuteRecipeWithAndTargetPanel;
@@ -134,7 +134,7 @@ public class ORExecuteRecipeToolWindowPanel extends ORSimpleToolWindowPanel
 	protected void updateUIState()
 	{
 		this.refreshToolbar();
-		UIThreadUtil.run(this.getProject(), this::updateBtnRewriteEnabled);
+		UIThreadAccessor.run(this.getProject(), this::updateBtnRewriteEnabled);
 	}
 	
 	protected boolean canExecute()
