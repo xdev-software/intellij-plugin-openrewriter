@@ -4,7 +4,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 
 
-public final class UIThreadUtil
+public final class UIThreadAccessor
 {
 	public static void run(final Project project, final Runnable runnable)
 	{
@@ -16,7 +16,7 @@ public final class UIThreadUtil
 		});
 	}
 	
-	private UIThreadUtil()
+	private UIThreadAccessor()
 	{
 	}
 }

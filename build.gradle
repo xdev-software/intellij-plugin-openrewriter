@@ -3,13 +3,13 @@ plugins {
     id 'idea'
     id 'checkstyle'
     id 'pmd'
-    id 'org.jetbrains.intellij.platform' version '2.1.0'
-    id 'org.sonarqube' version '5.1.0.4882'
+    id 'org.jetbrains.intellij.platform' version '2.18.1'
 }
 
 ext {
-    checkstyleVersion = '10.20.1'
-    pmdVersion = '7.7.0'
+    checkstyleVersion = '13.10.0'
+
+    pmdVersion = '7.26.0'
 }
 
 def properties(String key) {
@@ -44,6 +44,8 @@ configurations.checkstyle {
     }
 }
 
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
+
 // Add dependencies to test, junit5 api (annotations) and engine (runtime)
 dependencies {
     intellijPlatform {
@@ -52,15 +54,14 @@ dependencies {
         plugins(properties("platformPlugins").map { it.split(",").collect { it.trim() }.findAll { !it.empty } })
         pluginVerifier()
         zipSigner()
-        instrumentationTools()
     }
     checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
     pmd "net.sourceforge.pmd:pmd-ant:${pmdVersion}",
             "net.sourceforge.pmd:pmd-java:${pmdVersion}"
-    testImplementation platform('org.junit:junit-bom:5.11.3'),
+    testImplementation platform('org.junit:junit-bom:6.1.3'),
             'org.junit.jupiter:junit-jupiter',
             'org.junit.jupiter:junit-jupiter-engine',
-            'org.assertj:assertj-core:3.26.3'
+            'org.assertj:assertj-core:3.27.7'
     testRuntimeOnly("org.junit.platform:junit-platform-launcher") {
         because("Only needed to run tests in a version of IntelliJ IDEA that bundles older versions")
     }
@@ -72,8 +73,13 @@ dependencies {
 // See https://www.jetbrains.com/intellij-repository/releases
 intellijPlatform {
     pluginConfiguration {
+        id = properties("pluginGroup")
         name = properties("pluginName")
         version = properties("pluginVersion")
+        ideaVersion {
+            sinceBuild = properties("platformSinceBuild")
+            untilBuild = provider { null }
+        }
     }
     patchPluginXml {
         pluginId = properties("pluginGroup")
@@ -84,7 +90,10 @@ intellijPlatform {
     }
     pluginVerification {
         ides {
-            recommended()
+            select {
+                it.types = [IntelliJPlatformType.IntellijIdea]
+                it.sinceBuild = properties("platformSinceBuild")
+            }
         }
     }
     signPlugin {
@@ -104,14 +113,14 @@ intellijPlatform {
 
 checkstyle {
     configDirectory = file("$rootProject.projectDir/.config/checkstyle")
-    ignoreFailures false
-    showViolations true
+    ignoreFailures = false
+    showViolations = true
     toolVersion = checkstyleVersion
 }
 
 pmd {
     consoleOutput = true
-    ruleSetFiles = files(".config/pmd/ruleset.xml")
+    ruleSetFiles = files(".config/pmd/java/ruleset.xml")
     toolVersion = pmdVersion
 }
 
@@ -127,8 +136,8 @@ tasks.withType(Pmd).configureEach {
 // https://docs.gradle.org/current/dsl/org.gradle.api.tasks.compile.JavaCompile.html
 tasks.withType(JavaCompile).configureEach {
     // JAVA compatibility
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -138,16 +147,6 @@ compileTestJava.options.encoding = 'UTF-8'
 // Activate junit since gradle 4.7
 test {
     useJUnitPlatform()
-}
-
-sonar {
-    properties {
-        // Ignore sonar warnings globally
-        property 'sonar.issue.ignore.multicriteria', 'S1948'
-        // Ignore serialization waring as it's only relevant for RMI which is not used
-        property 'sonar.issue.ignore.multicriteria.S1948.ruleKey', 'java:S1948'
-        property 'sonar.issue.ignore.multicriteria.S1948.resourceKey', '**/*.java'
-    }
 }
 
 // Add resources directory because intellij test framework checks there for test resources (instead of build/resources)

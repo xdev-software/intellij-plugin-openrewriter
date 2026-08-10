@@ -20,7 +20,7 @@ class SimpleExecuteRecipeAction extends AnAction implements DumbAware
 	private final Supplier<Boolean> isEnabled;
 	private final Consumer<AnActionEvent> onClick;
 	
-	public SimpleExecuteRecipeAction(
+	SimpleExecuteRecipeAction(
 		@Nullable @NlsActions.ActionText final String text,
 		final @Nullable Icon icon,
 		final Supplier<Boolean> isEnabled,

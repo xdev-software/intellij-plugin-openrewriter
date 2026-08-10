@@ -38,6 +38,7 @@ public class ORSimpleToolWindowPanel extends SimpleToolWindowPanel implements Di
 		return this.getProject().getService(serviceClass);
 	}
 	
+	@SuppressWarnings("PMD.UnusedAssignment") // FP
 	protected void setToolbar(final String id, final ActionGroup group)
 	{
 		if(this.toolbar != null)

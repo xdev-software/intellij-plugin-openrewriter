@@ -115,7 +115,7 @@ public class PresentableProviderPanel<P extends PresentableProvider<? extends T>
 	{
 		this.clazzAndProvider.clear();
 		this.clazzAndProvider.putAll(providers.stream()
-			.collect(Collectors.toMap(p -> p.matchingClass(), Function.identity())));
+			.collect(Collectors.toMap(PresentableProvider::matchingClass, Function.identity())));
 		
 		this.cbProvider.setModel(new DefaultComboBoxModel<>(new Vector<>(providers)));
 	}

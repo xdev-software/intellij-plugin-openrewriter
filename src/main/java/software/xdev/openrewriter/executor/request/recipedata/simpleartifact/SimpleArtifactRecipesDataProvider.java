@@ -138,7 +138,7 @@ public class SimpleArtifactRecipesDataProvider implements RecipesDataProvider<Si
 		{
 			private final Predicate<String> checkFunc;
 			
-			public ArtifactRecipesValidator(final Predicate<String> checkFunc)
+			ArtifactRecipesValidator(final Predicate<String> checkFunc)
 			{
 				this.checkFunc = checkFunc;
 			}

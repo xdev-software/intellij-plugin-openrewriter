@@ -18,7 +18,7 @@
 
     <depends>com.intellij.modules.platform</depends>
     <depends optional="true" config-file="plugin-maven.xml">org.jetbrains.idea.maven</depends>
-    <depends optional="true" config-file="plugin-gradle.xml">org.jetbrains.plugins.gradle</depends>
+    <depends optional="true" config-file="plugin-gradle.xml">com.intellij.gradle</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="OpenRewriter"
