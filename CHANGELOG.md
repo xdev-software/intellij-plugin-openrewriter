@@ -1,3 +1,7 @@
+# 1.0.4
+* Drop support for IntelliJ < 2026.2
+  * This is required because the IntelliJ Gradle plugin was relocated 
+
 # 1.0.3
 * Drop support for IntelliJ < 2024.3
   * This is required to fix deprecations
