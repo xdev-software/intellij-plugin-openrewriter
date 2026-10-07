@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<idea-plugin>
+	<extensions defaultExtensionNs="software.xdev.openrewriter">
+		<recipesExecutor implementation="software.xdev.openrewriter.executor.maven.MavenRecipesExecutor"/>
+
+		<requestCommandBuilder
+				implementation="software.xdev.openrewriter.executor.maven.rcb.MavenModuleExecutionTargetRCB"/>
+		<requestCommandBuilder
+				implementation="software.xdev.openrewriter.executor.maven.rcb.MavenDirectoryExecutionTargetRCB"/>
+		<requestCommandBuilder
+				implementation="software.xdev.openrewriter.executor.maven.rcb.MavenSimpleArtifactRecipesDataRCB"/>
+	</extensions>
+</idea-plugin>
